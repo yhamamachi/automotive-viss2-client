@@ -2,9 +2,11 @@
 
 import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import { SpeedMeterBase as VehicleSpeedMeter} from './parts/SpeedMeter'
 
 export const WebSocketTest = () => {
   const [message, setMessage] = React.useState()
+  const [vspd, setVehicleSpeed] = React.useState(0)
   const socketRef = React.useRef()
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
@@ -13,6 +15,18 @@ export const WebSocketTest = () => {
     // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
     const websocket = new ReconnectingWebSocket('ws://10.166.14.46:8080')
     socketRef.current = websocket
+    const item_path = "Vehicle.Speed"
+    socketRef.current?.send(
+      JSON.stringify({
+        'action': 'subscribe',
+        "filter": {
+            "type": "change",
+            "value": { "logic-op": "ne", "diff": "0" }
+        },
+        'path': item_path,
+        'requestId': item_path
+      })
+    );
 
     // #2.メッセージ受信時のイベントハンドラを設定
     const onMessage = (event: MessageEvent) => {
@@ -22,6 +36,7 @@ export const WebSocketTest = () => {
       let myArray = JSON.parse(event.data);
       if( myArray["action"] == "subscription"){
         console.log(myArray["data"]["dp"]["value"])
+        setVehicleSpeed(myArray["data"]["dp"]["value"])
       }
     }
     websocket.addEventListener('message', onMessage)
@@ -56,6 +71,7 @@ export const WebSocketTest = () => {
       >
         Subscribe
       </button>
+      <VehicleSpeedMeter val={vspd} min={0} max={160}/>
     </>
   );
 }
