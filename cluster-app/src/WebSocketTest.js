@@ -3,10 +3,31 @@
 import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { SpeedMeterBase as VehicleSpeedMeter} from './parts/SpeedMeter'
+import { SpeedMeterBase as EngineSpeedMeter} from './parts/SpeedMeter'
+
+const GenerateSubscibeJson = (DataPath) => {
+  return (
+    JSON.stringify({
+      'action': 'subscribe',
+      "filter": {
+          "type": "change",
+          "value": { "logic-op": "ne", "diff": "0" }
+      },
+      'path': DataPath,
+      'requestId': DataPath
+    })
+  )
+}
+
+const SubscPathList = [
+  "Vehicle.Speed",
+  "Vehicle.OBD.EngineSpeed",
+]
 
 export const WebSocketTest = () => {
   const [message, setMessage] = React.useState()
   const [vspd, setVehicleSpeed] = React.useState(0)
+  const [espd, setEngineSpeed] = React.useState(0)
   const socketRef = React.useRef()
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
@@ -15,19 +36,11 @@ export const WebSocketTest = () => {
     // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
     const websocket = new ReconnectingWebSocket('ws://10.166.14.46:8080')
     socketRef.current = websocket
-    const item_path = "Vehicle.Speed"
-    socketRef.current?.send(
-      JSON.stringify({
-        'action': 'subscribe',
-        "filter": {
-            "type": "change",
-            "value": { "logic-op": "ne", "diff": "0" }
-        },
-        'path': item_path,
-        'requestId': item_path
-      })
-    );
-
+    SubscPathList.forEach(element => {
+      console.log(GenerateSubscibeJson(SubscPathList[element]))
+      socketRef.current?.send(GenerateSubscibeJson(element));
+    });
+    
     // #2.メッセージ受信時のイベントハンドラを設定
     const onMessage = (event: MessageEvent) => {
       console.log(event)
@@ -35,8 +48,14 @@ export const WebSocketTest = () => {
 
       let myArray = JSON.parse(event.data);
       if( myArray["action"] == "subscription"){
-        console.log(myArray["data"]["dp"]["value"])
-        setVehicleSpeed(myArray["data"]["dp"]["value"])
+        if ("Vehicle.Speed" === myArray["data"]["path"]) {
+          console.log(myArray["data"]["dp"]["value"])
+          setVehicleSpeed(parseInt(myArray["data"]["dp"]["value"]))
+        }
+        if ("Vehicle.OBD.EngineSpeed" === myArray["data"]["path"]) {
+          console.log(myArray["data"]["dp"]["value"])
+          setEngineSpeed(myArray["data"]["dp"]["value"])
+        }
       }
     }
     websocket.addEventListener('message', onMessage)
@@ -50,28 +69,11 @@ export const WebSocketTest = () => {
 
   return (
     <>
-      <div>最後に受信したメッセージ: {message}</div>
-      <button
-        type="button"
-        onClick={() => {
-          // #4.WebSocketでメッセージを送信する場合は、イベントハンドラ内でsendメソッドを実行
-          const item_path = "Vehicle.Speed"
-          socketRef.current?.send(
-            JSON.stringify({
-              'action': 'subscribe',
-              "filter": {
-                  "type": "change",
-                  "value": { "logic-op": "ne", "diff": "0" }
-              },
-              'path': item_path,
-              'requestId': item_path
-            })
-          );
-        }}
-      >
-        Subscribe
-      </button>
-      <VehicleSpeedMeter val={vspd} min={0} max={160}/>
+      {/* <div>最後に受信したメッセージ: {message}</div> */}
+      <div style={{"display": "flex"}}>
+        <VehicleSpeedMeter val={vspd} min={0} max={180} segment={10} unit={" km/h"} title={"Speed"}/>
+        <EngineSpeedMeter val={espd} min={0} max={7000} segment={7} title={"Engine"}/>
+      </div>
     </>
   );
 }
