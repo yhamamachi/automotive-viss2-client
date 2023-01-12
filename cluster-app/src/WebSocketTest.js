@@ -4,6 +4,8 @@ import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import { SpeedMeterBase as VehicleSpeedMeter} from './parts/SpeedMeter'
 import { SpeedMeterBase as EngineSpeedMeter} from './parts/SpeedMeter'
+import { FuelMeter } from './parts/FuelMeter'
+import { BatteryGaugeBase }from './parts/BatteryGauge'
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -22,12 +24,16 @@ const GenerateSubscibeJson = (DataPath) => {
 const SubscPathList = [
   "Vehicle.Speed",
   "Vehicle.OBD.EngineSpeed",
+  "Vehicle.Powertrain.FuelSystem.Level",
+  "Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed",
 ]
 
 export const WebSocketTest = () => {
   const [message, setMessage] = React.useState()
   const [vspd, setVehicleSpeed] = React.useState(0)
   const [espd, setEngineSpeed] = React.useState(0)
+  const [fuel, setFuelLevel] = React.useState(25)
+  const [battery, setBatteryLevel] = React.useState(50)
   const socketRef = React.useRef()
 
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
@@ -49,12 +55,20 @@ export const WebSocketTest = () => {
       let myArray = JSON.parse(event.data);
       if( myArray["action"] == "subscription"){
         if ("Vehicle.Speed" === myArray["data"]["path"]) {
-          console.log(myArray["data"]["dp"]["value"])
+          //console.log(myArray["data"]["dp"]["value"])
           setVehicleSpeed(parseInt(myArray["data"]["dp"]["value"]))
         }
         if ("Vehicle.OBD.EngineSpeed" === myArray["data"]["path"]) {
-          console.log(myArray["data"]["dp"]["value"])
+          //console.log(myArray["data"]["dp"]["value"])
           setEngineSpeed(myArray["data"]["dp"]["value"])
+        }
+        if ("Vehicle.Powertrain.FuelSystem.Level" === myArray["data"]["path"]) {
+          console.log(myArray["data"]["dp"]["value"])
+          setFuelLevel(myArray["data"]["dp"]["value"])
+        }
+        if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === myArray["data"]["path"]) {
+          console.log(myArray["data"]["dp"]["value"])
+          setBatteryLevel(myArray["data"]["dp"]["value"])
         }
       }
     }
@@ -72,7 +86,11 @@ export const WebSocketTest = () => {
       {/* <div>最後に受信したメッセージ: {message}</div> */}
       <div style={{"display": "flex"}}>
         <VehicleSpeedMeter val={vspd} min={0} max={180} segment={10} unit={" km/h"} title={"Speed"}/>
-        <EngineSpeedMeter val={espd} min={0} max={7000} segment={7} title={"Engine"}/>
+        <EngineSpeedMeter val={espd} min={0} max={7000} segment={7}  unit={" rpm"} title={"Engine"}/>
+        <div>
+          <FuelMeter val={fuel/100.0}/>
+          <BatteryGaugeBase val={battery}/>
+        </div>
       </div>
     </>
   );
