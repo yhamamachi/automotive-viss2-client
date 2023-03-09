@@ -48,11 +48,11 @@ export const ClusterApp = () => {
     if("serverPort" in query) g_serverPort = query['serverPort'];
   }, []);
 
-  if(g_debugFlag){
-    React.useEffect(() => {
-      /**
-       * For debug/demo purpose
-       */
+  React.useEffect(() => {
+    if(g_debugFlag){
+    /**
+     * For debug/demo purpose
+    */
       const interval = setInterval(() => {
         setVehicleSpeed(Math.floor(Math.random()*180))
         setEngineSpeed(Math.floor(Math.random()*7000))
@@ -60,11 +60,11 @@ export const ClusterApp = () => {
         setBatteryLevel(Math.floor(Math.random()*100))
       }, 1000);
       return () => {};
-    }, []);
-  }
-  else {
-    // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
-    React.useEffect(() => {
+    }
+  }, []);
+  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
+  React.useEffect(() => {
+    if(!g_debugFlag){
       /**
        * Websocket proc
        */
@@ -109,8 +109,8 @@ export const ClusterApp = () => {
         websocket.close()
         websocket.removeEventListener('message', onMessage)
       }
-    }, [])
-  }
+    }
+  }, [])
 
   return (
     <>
