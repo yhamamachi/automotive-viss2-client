@@ -2,6 +2,7 @@
 
 import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import queryString from 'query-string';
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -32,50 +33,80 @@ export const ClusterApp = () => {
   const [battery, setBatteryLevel] = React.useState(50)
   const socketRef = React.useRef()
 
-  // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
-  React.useEffect(() => {
-    // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
-    // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
-    const websocket = new ReconnectingWebSocket('ws://10.166.14.46:8080')
-    socketRef.current = websocket
-    SubscPathList.forEach(element => {
-      console.log(GenerateSubscibeJson(SubscPathList[element]))
-      socketRef.current?.send(GenerateSubscibeJson(element));
-    });
-    
-    // #2.メッセージ受信時のイベントハンドラを設定
-    const onMessage = (event: MessageEvent) => {
-      console.log(event)
-      setMessage(event.data)
+  let g_debugFlag = 0; // Switch using websocket or using dummy value.
 
-      let myArray = JSON.parse(event.data);
-      if( myArray["action"] == "subscription"){
-        if ("Vehicle.Speed" === myArray["data"]["path"]) {
-          //console.log(myArray["data"]["dp"]["value"])
-          setVehicleSpeed(parseInt(myArray["data"]["dp"]["value"]))
-        }
-        if ("Vehicle.OBD.EngineSpeed" === myArray["data"]["path"]) {
-          //console.log(myArray["data"]["dp"]["value"])
-          setEngineSpeed(myArray["data"]["dp"]["value"])
-        }
-        if ("Vehicle.Powertrain.FuelSystem.Level" === myArray["data"]["path"]) {
-          console.log(myArray["data"]["dp"]["value"])
-          setFuelLevel(myArray["data"]["dp"]["value"])
-        }
-        if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === myArray["data"]["path"]) {
-          console.log(myArray["data"]["dp"]["value"])
-          setBatteryLevel(myArray["data"]["dp"]["value"])
+  React.useLayoutEffect(() => { // Executed before useEffect.(useLayoutEffect -> useEffect)
+    /**
+     * URL query proc
+     */
+    const search = location.search;
+    const query = queryString.parse(search);
+    if("debug" in query) g_debugFlag = 1;
+  }, []);
+
+  if(g_debugFlag){
+    React.useEffect(() => {
+      /**
+       * For debug/demo purpose
+       */
+      const interval = setInterval(() => {
+        setVehicleSpeed(Math.floor(Math.random()*180))
+        setEngineSpeed(Math.floor(Math.random()*7000))
+        setFuelLevel(Math.floor(Math.random()*10000))
+        setBatteryLevel(Math.floor(Math.random()*100))
+      }, 1000);
+      return () => {};
+    }, []);
+  }
+  else {
+    // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
+    React.useEffect(() => {
+      /**
+       * Websocket proc
+       */
+      // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
+      // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
+      const websocket = new ReconnectingWebSocket('ws://10.166.14.46:8080')
+      socketRef.current = websocket
+      SubscPathList.forEach(element => {
+        console.log(GenerateSubscibeJson(SubscPathList[element]))
+        socketRef.current?.send(GenerateSubscibeJson(element));
+      });
+
+      // #2.メッセージ受信時のイベントハンドラを設定
+      const onMessage = (event: MessageEvent) => {
+        console.log(event)
+        setMessage(event.data)
+
+        let myArray = JSON.parse(event.data);
+        if( myArray["action"] == "subscription"){
+          if ("Vehicle.Speed" === myArray["data"]["path"]) {
+            //console.log(myArray["data"]["dp"]["value"])
+            setVehicleSpeed(parseInt(myArray["data"]["dp"]["value"]))
+          }
+          if ("Vehicle.OBD.EngineSpeed" === myArray["data"]["path"]) {
+            //console.log(myArray["data"]["dp"]["value"])
+            setEngineSpeed(myArray["data"]["dp"]["value"])
+          }
+          if ("Vehicle.Powertrain.FuelSystem.Level" === myArray["data"]["path"]) {
+            console.log(myArray["data"]["dp"]["value"])
+            setFuelLevel(myArray["data"]["dp"]["value"])
+          }
+          if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === myArray["data"]["path"]) {
+            console.log(myArray["data"]["dp"]["value"])
+            setBatteryLevel(myArray["data"]["dp"]["value"])
+          }
         }
       }
-    }
-    websocket.addEventListener('message', onMessage)
+      websocket.addEventListener('message', onMessage)
 
-    // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
-    return () => {
-      websocket.close()
-      websocket.removeEventListener('message', onMessage)
-    }
-  }, [])
+      // #3.useEffectのクリーンアップの中で、WebSocketのクローズ処理を実行
+      return () => {
+        websocket.close()
+        websocket.removeEventListener('message', onMessage)
+      }
+    }, [])
+  }
 
   return (
     <>
