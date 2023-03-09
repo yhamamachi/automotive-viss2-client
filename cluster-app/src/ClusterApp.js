@@ -4,6 +4,8 @@ import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import queryString from 'query-string';
 
+import "./ClusterApp.css"
+
 const GenerateSubscibeJson = (DataPath) => {
   return (
     JSON.stringify({
@@ -115,7 +117,7 @@ export const ClusterApp = () => {
   return (
     <>
       {/* <div>最後に受信したメッセージ: {message}</div> */}
-      <div style={{"display": "flex"}}>
+      <div className="ClusterApp" style={{"display": "flex"}}>
         <div>
           For debug outputs:
           <p>Vehicle Speed:{vspd} km/h</p>
