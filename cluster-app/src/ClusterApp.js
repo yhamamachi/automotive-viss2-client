@@ -6,6 +6,10 @@ import queryString from 'query-string';
 
 import "./ClusterApp.css"
 
+/* import local components */
+import {Gauge as BatteryGauge} from "./components/Gauge"
+import {Gauge as FuelGauge} from "./components/Gauge"
+
 const GenerateSubscibeJson = (DataPath) => {
   return (
     JSON.stringify({
@@ -118,6 +122,7 @@ export const ClusterApp = () => {
     <>
       {/* <div>最後に受信したメッセージ: {message}</div> */}
       <div className="ClusterApp" style={{"display": "flex"}}>
+        <BatteryGauge  id="gauge_1" val={battery}/>
         <div>
           For debug outputs:
           <p>Vehicle Speed:{vspd} km/h</p>
@@ -125,6 +130,7 @@ export const ClusterApp = () => {
           <p>Fuel Meter:   {fuel/100.0} %</p>
           <p>Battery:      {battery} %</p>
         </div>
+        <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
       </div>
     </>
   );
