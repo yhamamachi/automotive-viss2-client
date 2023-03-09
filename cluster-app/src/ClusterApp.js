@@ -34,6 +34,8 @@ export const ClusterApp = () => {
   const socketRef = React.useRef()
 
   let g_debugFlag = 0; // Switch using websocket or using dummy value.
+  let g_serverAddr = "localhost"
+  let g_serverPort = "8080"
 
   React.useLayoutEffect(() => { // Executed before useEffect.(useLayoutEffect -> useEffect)
     /**
@@ -42,6 +44,8 @@ export const ClusterApp = () => {
     const search = location.search;
     const query = queryString.parse(search);
     if("debug" in query) g_debugFlag = 1;
+    if("serverAddr" in query) g_serverAddr = query['serverAddr'];
+    if("serverPort" in query) g_serverPort = query['serverPort'];
   }, []);
 
   if(g_debugFlag){
@@ -66,7 +70,7 @@ export const ClusterApp = () => {
        */
       // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
       // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
-      const websocket = new ReconnectingWebSocket('ws://10.166.14.46:8080')
+      const websocket = new ReconnectingWebSocket('ws://'+g_serverAddr+':'+g_serverPort)
       socketRef.current = websocket
       SubscPathList.forEach(element => {
         console.log(GenerateSubscibeJson(SubscPathList[element]))
