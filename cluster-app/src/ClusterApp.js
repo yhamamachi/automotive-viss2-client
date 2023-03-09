@@ -59,7 +59,7 @@ export const ClusterApp = () => {
         setFuelLevel(Math.floor(Math.random()*10000))
         setBatteryLevel(Math.floor(Math.random()*100))
       }, 1000);
-      return () => {};
+      return () => {clearTimeout(interval)};
     }
   }, []);
   // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
