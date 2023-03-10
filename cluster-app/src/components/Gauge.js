@@ -1,8 +1,6 @@
 import React,{useState,useEffect} from "react"
 import ReactDOM from "react-dom"
 
-const CANVAS_WIDTH=100
-const CANVAS_HEIGHT=200
 const moveValue = 2;
 const fillColor = "#38c"
 
@@ -18,6 +16,9 @@ export const Gauge = (props) => {
     const [updateFlag, setUpdateFlag] = React.useState(0)
     
     const animationRef = React.useRef();
+
+    const CANVAS_WIDTH=props.width
+    const CANVAS_HEIGHT=props.height    
     var gauge_val = val;
     let tan = (CANVAS_WIDTH/2) / CANVAS_HEIGHT
 
@@ -106,7 +107,7 @@ export const Gauge = (props) => {
 
     return(
         <div>
-            <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} id={props.id} style={styles}></canvas>
+            <canvas width={props.width} height={props.height} id={props.id} style={styles}></canvas>
         </div>
     )
 }

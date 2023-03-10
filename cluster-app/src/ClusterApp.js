@@ -4,6 +4,7 @@ import React from 'react'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import queryString from 'query-string';
 
+// based_size = 1920 x 720
 import "./ClusterApp.css"
 
 /* import local components */
@@ -133,26 +134,55 @@ export const ClusterApp = () => {
     }
   }, [])
 
+  
+  /** Calculate window scale */
+  const width  = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const height = window.innerHeight|| document.documentElement.clientHeight|| document.body.clientHeight;
+  let scale = width/1920.0
+  if( width*720/1920 > height) scale = height/720.0
+
+  /* config */
+  let TextSpeedWidth = 240;
+  let TextGearWidth = 120;
+  let GaugeWidth = 120
   return (
     <>
-      {/* <div>最後に受信したメッセージ: {message}</div> */}
-      <div className="ClusterApp" style={{"display": "flex"}}>
-        <SpeedGauge id="l_gauge_1" val={vspd/180*100.0}/>
-        <BatteryGauge  id="gauge_1" val={battery}/>
-        <div style={{"display": "flex"}}>
-          <SpeedDisplay id="text_1" val={vspd} sub_val="km/h"/>
-          <SpeedDisplay id="text_2" val={GearNumToStr[gear]} />
-        </div>
-        <HTMLViewer url="/dummy.html" id="html_1" width="240px" height="180px" />
-        <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
-        <EngineGauge id="l_gauge_2" val={espd/7000*100.0} mirror/>
+    <div className="ClusterApp" style={{"width":scale*1920, "height":scale*720}}>
+      {/** Side component */}
+      <div className="component"  style={{"top": scale*100+"px", "left": 0+"px"}}>
+        <SpeedGauge className="component" id="l_gauge_1" val={vspd/180*100.0} width={scale*700} height={scale*560} />
       </div>
-      <p>
-      For debug outputs:<br/>
-      Vehicle Speed:{vspd} km/h<br/>
-      Engine Speed: {espd} rpm<br/>
-      Fuel Meter:   {fuel/100.0} %<br/>
-      Battery:      {battery} %<br/>
+      <div className="component"  style={{"top": scale*100+"px", "left": scale*(1920-700)+"px"}}>
+        <EngineGauge className="component" id="l_gauge_2" val={espd/7000*100.0}  width={scale*700} height={scale*560} mirror/>
+      </div>
+      <div className="component"  style={{"top": scale*(660-2.5*GaugeWidth)+"px", "left": scale*(960-700)+"px"}}>
+        <BatteryGauge  id="gauge_1" val={battery} width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
+      </div>
+      <div className="component"  style={{"top": scale*(660-2.5*GaugeWidth)+"px", "left": scale*(960+700-GaugeWidth)+"px"}}>
+        <FuelGauge id="gauge_2" val={fuel/100.0} width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
+      </div>
+
+      {/** Center component */}
+      <div className="component"  style={{"top": scale*(90)+"px", "left": scale*(960-TextSpeedWidth/2)+"px"}}>
+        <SpeedDisplay id="text_1" val={vspd} sub_val="km/h" width={scale*(TextSpeedWidth)} height={scale*(TextSpeedWidth*3/4)}/>
+      </div>
+      <div className="component"  style={{"top": scale*(130)+"px", "left": scale*(960+130)+"px"}}>
+        <SpeedDisplay id="text_2" val={GearNumToStr[gear]} width={scale*(TextGearWidth)} height={scale*(TextGearWidth)}/>
+      </div>
+      <div className="component"  style={{"top": (scale*350)+"px", "left": scale*(960-160)+"px"}}>
+        <HTMLViewer url="/dummy.html" id="html1" width={scale*(320)+"px"} height={scale*(240)+"px"} />
+      </div>
+    </div>
+
+    {/* for Debug */}
+      {/* <div>最後に受信したメッセージ: {message}</div> */}
+      <p style={{"display": "none"}}>
+        For debug outputs:<br/>
+        width, height, scale: {width} {height} {scale}<br/>
+        Vehicle Speed:{vspd} km/h<br/>
+        Engine Speed: {espd} rpm<br/>
+        Fuel Meter:   {fuel/100.0} %<br/>
+        Battery:      {battery} %<br/>
       </p>
     </>
   );

@@ -1,8 +1,6 @@
 import React,{useState,useEffect} from "react"
 import ReactDOM from "react-dom"
 
-const CANVAS_WIDTH=300
-const CANVAS_HEIGHT=200
 const moveValue = 2;
 const fillColor = "#38c"
 
@@ -18,6 +16,9 @@ export const LargeGauge = (props) => {
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
     const [updateFlag, setUpdateFlag] = React.useState(0)
     
+    const CANVAS_WIDTH=Number(props.width)
+    const CANVAS_HEIGHT=Number(props.height)
+
     const animationRef = React.useRef();
     var gauge_val = val;
     let tan = (CANVAS_WIDTH/2) / CANVAS_HEIGHT
@@ -36,7 +37,8 @@ export const LargeGauge = (props) => {
         }
         setValue(gauge_val)
         
-        // canvas        
+        // canvas       
+        context.fillStyle = 'rgba(255,255,255,0)'; 
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         context.save()
         {
@@ -108,7 +110,7 @@ export const LargeGauge = (props) => {
 
     return(
         <div>
-            <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} id={props.id} style={styles}></canvas>
+            <canvas width={props.width} height={props.height} id={props.id} style={styles}></canvas>
         </div>
     )
 }
