@@ -138,18 +138,20 @@ export const ClusterApp = () => {
       <div className="ClusterApp" style={{"display": "flex"}}>
         <SpeedGauge id="l_gauge_1" val={vspd/180*100.0}/>
         <BatteryGauge  id="gauge_1" val={battery}/>
-        <div>
+        <div style={{"display": "flex"}}>
           <SpeedDisplay id="text_1" val={vspd} sub_val="km/h"/>
-          For debug outputs:
-          <p>Vehicle Speed:{vspd} km/h</p>
-          <p>Engine Speed: {espd} rpm</p>
-          <p>Fuel Meter:   {fuel/100.0} %</p>
-          <p>Battery:      {battery} %</p>
+          <SpeedDisplay id="text_2" val={GearNumToStr[gear]} />
         </div>
-        <SpeedDisplay id="text_2" val={GearNumToStr[gear]} />
         <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
         <EngineGauge id="l_gauge_2" val={espd/7000*100.0} mirror/>
       </div>
+      <p>
+      For debug outputs:<br/>
+      Vehicle Speed:{vspd} km/h<br/>
+      Engine Speed: {espd} rpm<br/>
+      Fuel Meter:   {fuel/100.0} %<br/>
+      Battery:      {battery} %<br/>
+      </p>
     </>
   );
 }
