@@ -12,8 +12,9 @@ import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
 import {LargeGauge as EngineGauge} from "./components/LargeGauge"
 import {Gauge as BatteryGauge} from "./components/Gauge"
 import {Gauge as FuelGauge} from "./components/Gauge"
-import {TextDisplay as SpeedDisplay} from "./components/TextDisplay"
+import {TextDisplay} from "./components/TextDisplay"
 import {HTMLViewer} from "./components/HTMLViewer"
+
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -164,10 +165,10 @@ export const ClusterApp = () => {
 
       {/** Center component */}
       <div className="component"  style={{"top": scale*(90)+"px", "left": scale*(960-TextSpeedWidth/2)+"px"}}>
-        <SpeedDisplay id="text_1" val={vspd} sub_val="km/h" width={scale*(TextSpeedWidth)} height={scale*(TextSpeedWidth*3/4)}/>
+        <TextDisplay id="text_1" val={vspd} sub_val="km/h" width={scale*(TextSpeedWidth)} height={scale*(TextSpeedWidth*3/4)}/>
       </div>
       <div className="component"  style={{"top": scale*(130)+"px", "left": scale*(960+130)+"px"}}>
-        <SpeedDisplay id="text_2" val={GearNumToStr[gear]} width={scale*(TextGearWidth)} height={scale*(TextGearWidth)}/>
+        <TextDisplay id="text_2" val={GearNumToStr[gear]} width={scale*(TextGearWidth)} height={scale*(TextGearWidth)}/>
       </div>
       <div className="component"  style={{"top": (scale*350)+"px", "left": scale*(960-160)+"px"}}>
         <HTMLViewer url="/dummy.html" id="html1" width={scale*(320)+"px"} height={scale*(240)+"px"} />
