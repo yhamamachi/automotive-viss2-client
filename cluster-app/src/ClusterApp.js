@@ -12,6 +12,7 @@ import {LargeGauge as EngineGauge} from "./components/LargeGauge"
 import {Gauge as BatteryGauge} from "./components/Gauge"
 import {Gauge as FuelGauge} from "./components/Gauge"
 import {TextDisplay as SpeedDisplay} from "./components/TextDisplay"
+import {HTMLViewer} from "./components/HTMLViewer"
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -142,6 +143,7 @@ export const ClusterApp = () => {
           <SpeedDisplay id="text_1" val={vspd} sub_val="km/h"/>
           <SpeedDisplay id="text_2" val={GearNumToStr[gear]} />
         </div>
+        <HTMLViewer url="/dummy.html" id="html_1" width="240px" height="180px" />
         <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
         <EngineGauge id="l_gauge_2" val={espd/7000*100.0} mirror/>
       </div>
