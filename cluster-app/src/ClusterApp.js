@@ -87,7 +87,7 @@ export const ClusterApp = () => {
       const interval = setInterval(() => {
         setVehicleSpeed(Math.floor(Math.random()*180))
         setEngineSpeed(Math.floor(Math.random()*7000))
-        setFuelLevel(Math.floor(Math.random()*10000))
+        setFuelLevel(Math.floor(Math.random()*100))
         setBatteryLevel(Math.floor(Math.random()*100))
         setCurrentGear(Math.floor(Math.random()*5))
       }, 1000);
@@ -174,7 +174,7 @@ export const ClusterApp = () => {
         <BatteryGauge  id="gauge_1" val={battery} width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
       </div>
       <div className="component"  style={{"top": scale*(660-2.5*GaugeWidth)+"px", "left": scale*(960+700-GaugeWidth)+"px"}}>
-        <FuelGauge id="gauge_2" val={fuel/100.0} width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
+        <FuelGauge id="gauge_2" val={fuel} width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
       </div>
 
       {/** Center component */}
@@ -199,7 +199,7 @@ export const ClusterApp = () => {
         width, height, scale: {width} {height} {scale}<br/>
         Vehicle Speed:{vspd} km/h<br/>
         Engine Speed: {espd} rpm<br/>
-        Fuel Meter:   {fuel/100.0} %<br/>
+        Fuel Meter:   {fuel} %<br/>
         Battery:      {battery} %<br/>
       </p>
     </>
