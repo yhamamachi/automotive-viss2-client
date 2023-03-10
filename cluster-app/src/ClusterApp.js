@@ -48,7 +48,7 @@ export const ClusterApp = () => {
   const [espd, setEngineSpeed] = React.useState(0)
   const [fuel, setFuelLevel] = React.useState(25)
   const [battery, setBatteryLevel] = React.useState(50)
-  const [gear, setCurrentGear] = React.useState(0)
+  const [gear, setCurrentGear] = React.useState(4)
   const [time, setCurrentTime] = React.useState("00:00")
   const socketRef = React.useRef()
 
@@ -134,7 +134,7 @@ export const ClusterApp = () => {
           }
           if ("Vehicle.Powertrain.Transmission.Gear" === myArray["data"]["path"]) {
             console.log(myArray["data"]["dp"]["value"])
-            setCurrentGear(myArray["data"]["dp"]["value"])
+            setCurrentGear(myArray["data"]["dp"]["value"] + 1)
           }
         }
       }
