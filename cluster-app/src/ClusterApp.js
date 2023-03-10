@@ -7,6 +7,8 @@ import queryString from 'query-string';
 import "./ClusterApp.css"
 
 /* import local components */
+import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
+import {LargeGauge as EngineGauge} from "./components/LargeGauge"
 import {Gauge as BatteryGauge} from "./components/Gauge"
 import {Gauge as FuelGauge} from "./components/Gauge"
 
@@ -122,6 +124,7 @@ export const ClusterApp = () => {
     <>
       {/* <div>最後に受信したメッセージ: {message}</div> */}
       <div className="ClusterApp" style={{"display": "flex"}}>
+        <SpeedGauge id="l_gauge_1" val={vspd/180*100.0}/>
         <BatteryGauge  id="gauge_1" val={battery}/>
         <div>
           For debug outputs:
@@ -131,6 +134,7 @@ export const ClusterApp = () => {
           <p>Battery:      {battery} %</p>
         </div>
         <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
+        <EngineGauge id="l_gauge_2" val={espd/7000*100.0} mirror/>
       </div>
     </>
   );
