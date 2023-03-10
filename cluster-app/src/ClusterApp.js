@@ -49,6 +49,7 @@ export const ClusterApp = () => {
   const [fuel, setFuelLevel] = React.useState(25)
   const [battery, setBatteryLevel] = React.useState(50)
   const [gear, setCurrentGear] = React.useState(0)
+  const [time, setCurrentTime] = React.useState("00:00")
   const socketRef = React.useRef()
 
   let g_debugFlag = 0; // Switch using websocket or using dummy value.
@@ -64,6 +65,18 @@ export const ClusterApp = () => {
     if("debug" in query) g_debugFlag = 1;
     if("serverAddr" in query) g_serverAddr = query['serverAddr'];
     if("serverPort" in query) g_serverPort = query['serverPort'];
+
+    /**
+     * Get current time intarval funcition
+     */
+    const interval = setInterval(() => {
+      var dd = new Date();
+      var yy = String("0" + dd.getHours()).slice(-2)
+      var mm = String("0" + dd.getMinutes()).slice(-2)
+      setCurrentTime(yy+":"+mm)
+    }, 1000);
+    return () => {clearTimeout(interval)};
+
   }, []);
 
   React.useEffect(() => {
@@ -145,6 +158,7 @@ export const ClusterApp = () => {
   /* config */
   let TextSpeedWidth = 240;
   let TextGearWidth = 120;
+  let TextTimeWidth = 240;
   let GaugeWidth = 120
   return (
     <>
@@ -172,6 +186,9 @@ export const ClusterApp = () => {
       </div>
       <div className="component"  style={{"top": (scale*350)+"px", "left": scale*(960-160)+"px"}}>
         <HTMLViewer url="/dummy.html" id="html1" width={scale*(320)+"px"} height={scale*(240)+"px"} />
+      </div>
+      <div className="component"  style={{"top": scale*(620)+"px", "left": scale*(960-TextTimeWidth/2)+"px"}}>
+        <TextDisplay id="text_3" val={time} width={scale*(TextTimeWidth)} height={scale*(TextTimeWidth/3)}/>
       </div>
     </div>
 
