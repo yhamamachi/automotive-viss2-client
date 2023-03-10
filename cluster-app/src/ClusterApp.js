@@ -32,6 +32,11 @@ const SubscPathList = [
   "Vehicle.OBD.EngineSpeed",
   "Vehicle.Powertrain.FuelSystem.Level",
   "Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed",
+  "Vehicle.Powertrain.Transmission.Gear",
+]
+
+const GearNumToStr = [
+  "R", "N", "P", "L", "D"
 ]
 
 export const ClusterApp = () => {
@@ -40,6 +45,7 @@ export const ClusterApp = () => {
   const [espd, setEngineSpeed] = React.useState(0)
   const [fuel, setFuelLevel] = React.useState(25)
   const [battery, setBatteryLevel] = React.useState(50)
+  const [gear, setCurrentGear] = React.useState(0)
   const socketRef = React.useRef()
 
   let g_debugFlag = 0; // Switch using websocket or using dummy value.
@@ -67,6 +73,7 @@ export const ClusterApp = () => {
         setEngineSpeed(Math.floor(Math.random()*7000))
         setFuelLevel(Math.floor(Math.random()*10000))
         setBatteryLevel(Math.floor(Math.random()*100))
+        setCurrentGear(Math.floor(Math.random()*5))
       }, 1000);
       return () => {clearTimeout(interval)};
     }
@@ -109,6 +116,10 @@ export const ClusterApp = () => {
             console.log(myArray["data"]["dp"]["value"])
             setBatteryLevel(myArray["data"]["dp"]["value"])
           }
+          if ("Vehicle.Powertrain.Transmission.Gear" === myArray["data"]["path"]) {
+            console.log(myArray["data"]["dp"]["value"])
+            setCurrentGear(myArray["data"]["dp"]["value"])
+          }
         }
       }
       websocket.addEventListener('message', onMessage)
@@ -135,6 +146,7 @@ export const ClusterApp = () => {
           <p>Fuel Meter:   {fuel/100.0} %</p>
           <p>Battery:      {battery} %</p>
         </div>
+        <SpeedDisplay id="text_2" val={GearNumToStr[gear]} />
         <FuelGauge id="gauge_2" val={fuel/100.0} mirror="True"/>
         <EngineGauge id="l_gauge_2" val={espd/7000*100.0} mirror/>
       </div>
