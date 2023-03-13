@@ -30,14 +30,6 @@ const GenerateSubscibeJson = (DataPath) => {
   )
 }
 
-const SubscPathList = [
-  "Vehicle.Speed",
-  "Vehicle.OBD.EngineSpeed",
-  "Vehicle.Powertrain.FuelSystem.Level",
-  "Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed",
-  "Vehicle.Powertrain.Transmission.Gear",
-]
-
 const GearNumToStr = [
   "R", "N", "P", "L", "D"
 ]
@@ -51,6 +43,14 @@ export const ClusterApp = () => {
   const [gear, setCurrentGear] = React.useState(4)
   const [time, setCurrentTime] = React.useState("00:00")
   const socketRef = React.useRef()
+
+  const SubscPathList = { // data_path: setValue function
+    "Vehicle.Speed": setVehicleSpeed,
+    "Vehicle.OBD.EngineSpeed": setEngineSpeed,
+    "Vehicle.Powertrain.FuelSystem.Level": setFuelLevel,
+    "Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed": setBatteryLevel,
+    "Vehicle.Powertrain.Transmission.Gear": setCurrentGear,
+  }
 
   let g_debugFlag = 0; // Switch using websocket or using dummy value.
   let g_serverAddr = "localhost"
@@ -104,7 +104,7 @@ export const ClusterApp = () => {
       // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
       const websocket = new ReconnectingWebSocket('ws://'+g_serverAddr+':'+g_serverPort)
       socketRef.current = websocket
-      SubscPathList.forEach(element => {
+      Object.keys(SubscPathList).forEach(element => {
         console.log(GenerateSubscibeJson(SubscPathList[element]))
         socketRef.current?.send(GenerateSubscibeJson(element));
       });
@@ -119,20 +119,9 @@ export const ClusterApp = () => {
           let recv_value = myArray["data"]["dp"]["value"]
           let data_path = myArray["data"]["path"]
 
-          if ("Vehicle.Speed" === data_path) {
-            setVehicleSpeed(parseInt(recv_value))
-          }
-          if ("Vehicle.OBD.EngineSpeed" === data_path) {
-            setEngineSpeed(parseInt(recv_value))
-          }
-          if ("Vehicle.Powertrain.FuelSystem.Level" === data_path) {
-            setFuelLevel(Number(recv_value))
-          }
-          if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === data_path) {
-            setBatteryLevel(Number(recv_value))
-          }
-          if ("Vehicle.Powertrain.Transmission.Gear" === data_path) {
-            setCurrentGear(parseInt(recv_value) + 1)
+          if (Object.keys(SubscPathList).includes(data_path)) {
+            console.log(SubscPathList[data_path])
+            SubscPathList[data_path](Number(recv_value))
           }
         }
       }
