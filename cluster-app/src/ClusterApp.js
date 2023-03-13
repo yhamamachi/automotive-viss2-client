@@ -116,25 +116,23 @@ export const ClusterApp = () => {
 
         let myArray = JSON.parse(event.data);
         if( myArray["action"] == "subscription"){
-          if ("Vehicle.Speed" === myArray["data"]["path"]) {
-            //console.log(myArray["data"]["dp"]["value"])
-            setVehicleSpeed(parseInt(myArray["data"]["dp"]["value"]))
+          let recv_value = myArray["data"]["dp"]["value"]
+          let data_path = myArray["data"]["path"]
+
+          if ("Vehicle.Speed" === data_path) {
+            setVehicleSpeed(parseInt(recv_value))
           }
-          if ("Vehicle.OBD.EngineSpeed" === myArray["data"]["path"]) {
-            //console.log(myArray["data"]["dp"]["value"])
-            setEngineSpeed(myArray["data"]["dp"]["value"])
+          if ("Vehicle.OBD.EngineSpeed" === data_path) {
+            setEngineSpeed(parseInt(recv_value))
           }
-          if ("Vehicle.Powertrain.FuelSystem.Level" === myArray["data"]["path"]) {
-            console.log(myArray["data"]["dp"]["value"])
-            setFuelLevel(myArray["data"]["dp"]["value"])
+          if ("Vehicle.Powertrain.FuelSystem.Level" === data_path) {
+            setFuelLevel(Number(recv_value))
           }
-          if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === myArray["data"]["path"]) {
-            console.log(myArray["data"]["dp"]["value"])
-            setBatteryLevel(myArray["data"]["dp"]["value"])
+          if ("Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed" === data_path) {
+            setBatteryLevel(Number(recv_value))
           }
-          if ("Vehicle.Powertrain.Transmission.Gear" === myArray["data"]["path"]) {
-            console.log(myArray["data"]["dp"]["value"])
-            setCurrentGear(myArray["data"]["dp"]["value"] + 1)
+          if ("Vehicle.Powertrain.Transmission.Gear" === data_path) {
+            setCurrentGear(parseInt(recv_value) + 1)
           }
         }
       }
