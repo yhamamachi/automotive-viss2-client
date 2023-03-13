@@ -15,6 +15,7 @@ export const LargeGauge = (props) => {
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
     const [updateFlag, setUpdateFlag] = React.useState(0)
+    const [captionText, setCaptionText] = React.useState("")
     
     const CANVAS_WIDTH=Number(props.width)
     const CANVAS_HEIGHT=Number(props.height)
@@ -80,7 +81,18 @@ export const LargeGauge = (props) => {
             context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);//塗りつぶされた四角形            
         }
         context.restore()
-    
+        {
+            // Text
+            context.fillStyle = "#ccc"
+            context.font = "bold " + CANVAS_WIDTH*0.050 + "px serif"
+            context.textAlign = "center"
+            context.textBaseline = "bottom"
+            if(mirrorFlag) {
+                context.fillText(captionText, CANVAS_WIDTH*0.10, CANVAS_HEIGHT, CANVAS_WIDTH);
+            } else {
+                context.fillText(captionText, CANVAS_WIDTH*0.90, CANVAS_HEIGHT, CANVAS_WIDTH);
+            }
+        }
         // end process
         if (gauge_val == target_val) {
             cancelAnimationFrame(animationRef.current);
@@ -89,6 +101,7 @@ export const LargeGauge = (props) => {
     
     useEffect(()=>{ // update value
         setTargetValue(props.val);
+        if("text" in props) setCaptionText(props.text);
         if("mirror" in props) setMirrorFlag(1);
         console.log(target_val)
     },[props])
