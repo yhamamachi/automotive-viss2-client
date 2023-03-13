@@ -74,9 +74,20 @@ export const Gauge = (props) => {
                 context.fillStyle = lineargradient;
                 context.fillRect(0, CANVAS_HEIGHT/split_num*(split_num-i), CANVAS_WIDTH, line_width);//塗りつぶされた四角形
             }
-            
         }
         context.restore()
+        {
+            // Text
+            context.fillStyle = "#ccc"
+            context.font = "bold " + CANVAS_WIDTH*0.20 + "px serif"
+            context.textAlign = "center"
+            context.textBaseline = "middle"
+            context.fillText(props.text, CANVAS_WIDTH/2, CANVAS_HEIGHT*(1-0.20), CANVAS_WIDTH);
+            context.font = "bold " + CANVAS_WIDTH*0.20 + "px serif"
+            context.textAlign = "center"
+            context.textBaseline = "bottom"
+            context.fillText(target_val + "%", CANVAS_WIDTH/2, CANVAS_HEIGHT, CANVAS_WIDTH);
+        }
     
         // end process
         if (gauge_val == target_val) {

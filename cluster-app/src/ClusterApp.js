@@ -146,7 +146,8 @@ export const ClusterApp = () => {
   let TextSpeedWidth = 240;
   let TextGearWidth = 120;
   let TextTimeWidth = 240;
-  let GaugeWidth = 120
+  let GaugeWidth = 130
+
   return (
     <>
     <div className="ClusterApp" style={{"width":scale*1920, "height":scale*720}}>
@@ -157,11 +158,11 @@ export const ClusterApp = () => {
       <div className="component"  style={{"top": scale*100+"px", "left": scale*(1920-700)+"px"}}>
         <EngineGauge className="component" id="l_gauge_2" val={espd/7000*100.0}  width={scale*700} height={scale*560} mirror/>
       </div>
-      <div className="component"  style={{"top": scale*(660-2.5*GaugeWidth)+"px", "left": scale*(960-700)+"px"}}>
-        <BatteryGauge  id="gauge_1" val={battery} width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
+      <div className="component"  style={{"top": scale*(660-350)+"px", "left": scale*(960-700)+"px"}}>
+        <BatteryGauge  id="gauge_1" val={battery} text="Battery" width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
       </div>
-      <div className="component"  style={{"top": scale*(660-2.5*GaugeWidth)+"px", "left": scale*(960+700-GaugeWidth)+"px"}}>
-        <FuelGauge id="gauge_2" val={fuel} width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
+      <div className="component"  style={{"top": scale*(660-350)+"px", "left": scale*(960+700-GaugeWidth)+"px"}}>
+        <FuelGauge id="gauge_2" val={fuel} text="Fuel" width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
       </div>
 
       {/** Center component */}
