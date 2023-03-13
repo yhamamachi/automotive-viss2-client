@@ -13,12 +13,13 @@ export const TextDisplay = (props) => {
     const [val, setValue] = React.useState(0)
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
-    const [updateFlag, setUpdateFlag] = React.useState(0)
+    const [width, setWidth] = React.useState(0)
+    const [height, setHeight] = React.useState(0)
     
     const animationRef = React.useRef();
     
-    const CANVAS_WIDTH=props.width
-    const CANVAS_HEIGHT=props.height
+    const CANVAS_WIDTH=width
+    const CANVAS_HEIGHT=height
     var gauge_val = val;
     let tan = (CANVAS_WIDTH/2) / CANVAS_HEIGHT
 
@@ -73,6 +74,8 @@ export const TextDisplay = (props) => {
     
     useEffect(()=>{ // update value
         setTargetValue(props.val);
+        setWidth(props.width)
+        setHeight(props.height)
         if("mirror" in props) setMirrorFlag(1);
         console.log(target_val)
     },[props])
@@ -90,7 +93,7 @@ export const TextDisplay = (props) => {
                 cancelAnimationFrame(animationRef.current);
             }
         }
-    },[context, target_val])
+    },[context, target_val, width, height])
 
     return(
         <div>
