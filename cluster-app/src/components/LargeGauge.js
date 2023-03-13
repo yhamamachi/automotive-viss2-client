@@ -14,7 +14,6 @@ export const LargeGauge = (props) => {
     const [val, setValue] = React.useState(0)
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
-    const [updateFlag, setUpdateFlag] = React.useState(0)
     const [captionText, setCaptionText] = React.useState("")
     
     const CANVAS_WIDTH=Number(props.width)
