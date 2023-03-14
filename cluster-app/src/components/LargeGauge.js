@@ -15,6 +15,9 @@ export const LargeGauge = (props) => {
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
     const [captionText, setCaptionText] = React.useState("")
+    const [captionSubText, setCaptionSubText] = React.useState("")
+    const [max_val, setMaxValue] = React.useState(180)
+    const [split_num, setSplitNum] = React.useState(20)
     
     const CANVAS_WIDTH=Number(props.width)
     const CANVAS_HEIGHT=Number(props.height)
@@ -37,6 +40,11 @@ export const LargeGauge = (props) => {
         }
         setValue(gauge_val)
         
+        let gaugeWidth = 0.20
+        let upper_cross_point_x = 0.8 // -1/4x + ((1.0-gWidth)-0.2*-1/4) = -4x => 15/4x = ((1.0-gWidth)-0.05) => x= 1-4*(1.0-gWidth-0.05)/15
+        let upper_cross_point_y = 0.2; // y= -1/4x
+        let bottom_cross_point_x = 4.0*(1.0-gaugeWidth)/5 ; // -1/4x + (1.0-gWidth) = -4x - (1.0-gWidth) =>  15/4x = -2(1.0-gWidth) => x= 1- 8(1.0-gWidth)/15 
+        let bottom_cross_point_y = 1/4.0*bottom_cross_point_x + gaugeWidth; // y=-1/4x -0.2
         // canvas       
         context.fillStyle = 'rgba(255,255,255,0)'; 
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -49,25 +57,23 @@ export const LargeGauge = (props) => {
             } 
             // Gauge
             context.beginPath();
-            // 100~50%は横方向のゲージ、50%~0%は縦方向のゲージ
-            //upper_start_x = 0.8*CANVAS_WIDTH*(Math.max((test_val), 50)-50) + 0.2*CANVAS_WIDTH*(Math.max((test_val), 50))
-            let upper_start_x  =  CANVAS_WIDTH - 0.2*CANVAS_WIDTH *(Math.min((gauge_val), 50)/50.0) - 0.8*CANVAS_WIDTH *(Math.max((gauge_val)-50, 0)/50.0)
-            let upper_start_y  = CANVAS_HEIGHT - 0.8*CANVAS_HEIGHT*(Math.min((gauge_val), 50)/50.0) - 0.2*CANVAS_HEIGHT*(Math.max((gauge_val)-50, 0)/50.0)
-            let bottom_start_x = upper_start_x
-            let bottom_start_y = upper_start_y + (CANVAS_HEIGHT * 0.2)
-            if (gauge_val <= 40) {
-                bottom_start_x = upper_start_x - (CANVAS_WIDTH * 0.2)
-                bottom_start_y = upper_start_y
-            } else if(gauge_val <= 60) {
-                bottom_start_x = CANVAS_WIDTH -  CANVAS_WIDTH * 0.2 * (1+4/5)
-                bottom_start_y = CANVAS_HEIGHT - CANVAS_HEIGHT * 0.2 * 16/5             
-            }
 
+            let upper_start_x  = (1.0 - (gauge_val)/50 * (1.0-upper_cross_point_x)) *CANVAS_WIDTH
+            let upper_start_y  = (1.0 - (gauge_val)/50 * (1.0-upper_cross_point_y)) *CANVAS_HEIGHT
+            let bottom_start_x = ((1.0-gaugeWidth)- (gauge_val)/50 * ((1.0-gaugeWidth)-bottom_cross_point_x)) *CANVAS_WIDTH
+            let bottom_start_y = (1.0 - (gauge_val)/50 * (1.0-bottom_cross_point_y)) *CANVAS_HEIGHT
+            if (gauge_val > 50) {
+                upper_start_x = (100-gauge_val)/50 * upper_cross_point_x * CANVAS_WIDTH;
+                upper_start_y = (100-gauge_val)/50 * upper_cross_point_y * CANVAS_HEIGHT;
+                bottom_start_x = (100-gauge_val)/50 * (bottom_cross_point_x) * CANVAS_WIDTH;
+                bottom_start_y = (gaugeWidth + (100-gauge_val)/50 * (bottom_cross_point_y-gaugeWidth)) * CANVAS_HEIGHT;
+            }
+        
             context.moveTo(upper_start_x, upper_start_y)
-            if(CANVAS_WIDTH*0.8 > upper_start_x) context.lineTo( CANVAS_WIDTH*0.8, CANVAS_HEIGHT*0.2 );
+            if (gauge_val > 50) context.lineTo( CANVAS_WIDTH*upper_cross_point_x, CANVAS_HEIGHT*upper_cross_point_y );
             context.lineTo( CANVAS_WIDTH*1.0, CANVAS_HEIGHT*1.0 );
-            context.lineTo( CANVAS_WIDTH*0.8, CANVAS_HEIGHT*1.0 );
-            if(CANVAS_WIDTH*0.8 > bottom_start_x) context.lineTo( CANVAS_WIDTH* (1-9/25) , CANVAS_HEIGHT*(1-16/25));
+            context.lineTo( CANVAS_WIDTH*(1.0-gaugeWidth), CANVAS_HEIGHT*1.0 );
+            if (gauge_val > 50) context.lineTo( CANVAS_WIDTH* bottom_cross_point_x , CANVAS_HEIGHT*bottom_cross_point_y);
             context.lineTo(bottom_start_x, bottom_start_y);
             context.clip();
 
@@ -80,16 +86,58 @@ export const LargeGauge = (props) => {
             context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);//塗りつぶされた四角形            
         }
         context.restore()
+        if(0){ // cross point show
+            context.fillStyle = "red"
+            context.fillRect(upper_cross_point_x * CANVAS_WIDTH, upper_cross_point_y * CANVAS_HEIGHT
+            , 10, 10);//塗りつぶされた四角形              
+            context.fillStyle = "green"
+            context.fillRect(bottom_cross_point_x * CANVAS_WIDTH, bottom_cross_point_y * CANVAS_HEIGHT
+            , 10, 10);//塗りつぶされた四角形            
+        }
         {
             // Text
+            let font_size = 0.035
             context.fillStyle = "#ccc"
-            context.font = "bold " + CANVAS_WIDTH*0.050 + "px serif"
-            context.textAlign = "center"
+            context.font = "bold " + CANVAS_WIDTH*font_size + "px serif"
             context.textBaseline = "bottom"
             if(mirrorFlag) {
-                context.fillText(captionText, CANVAS_WIDTH*0.10, CANVAS_HEIGHT, CANVAS_WIDTH);
+                context.textAlign = "left"
+                context.fillText(captionText, CANVAS_WIDTH*(gaugeWidth+font_size*3), CANVAS_HEIGHT*(1-font_size*2), CANVAS_WIDTH);
+                context.fillText(captionSubText, CANVAS_WIDTH*(gaugeWidth+font_size*3), CANVAS_HEIGHT, CANVAS_WIDTH);
             } else {
-                context.fillText(captionText, CANVAS_WIDTH*0.90, CANVAS_HEIGHT, CANVAS_WIDTH);
+                context.textAlign = "right"
+                context.fillText(captionText, CANVAS_WIDTH*(1.0-gaugeWidth-font_size*3), CANVAS_HEIGHT*(1-font_size*2), CANVAS_WIDTH);
+                context.fillText(captionSubText, CANVAS_WIDTH*(1.0-gaugeWidth-font_size*3), CANVAS_HEIGHT, CANVAS_WIDTH);
+            }
+        }
+        {
+            // Splitter
+            let font_size = 0.05
+            context.fillStyle = "#ccc"
+            context.font = "bold " + CANVAS_WIDTH*font_size + "px serif"
+            context.textAlign = "left"
+            context.textBaseline = "bottom"
+            if(split_num > 0){
+                for( var num=0; num<max_val; num+=split_num){
+                    let _val_par = parseInt(100.0*num/max_val)
+                    let _val = num
+                    let bottom_start_x = ((1.0-gaugeWidth)- (_val_par)/50 * ((1.0-gaugeWidth)-bottom_cross_point_x)) *CANVAS_WIDTH
+                    let bottom_start_y = (1.0 - (_val_par)/50 * (1.0-bottom_cross_point_y)) *CANVAS_HEIGHT
+                    if (_val_par >= 50) {
+                        bottom_start_x = (100-_val_par)/50 * (bottom_cross_point_x) * CANVAS_WIDTH;
+                        bottom_start_y = (gaugeWidth + (100-_val_par)/50 * (bottom_cross_point_y-gaugeWidth)) * CANVAS_HEIGHT;
+                        context.textAlign = "center"
+                        context.textBaseline = "top"
+                        if(mirrorFlag) context.fillText(_val, (CANVAS_WIDTH-bottom_start_x)*(1+font_size), bottom_start_y*(1+font_size), CANVAS_WIDTH);
+                        else           context.fillText(_val, bottom_start_x*(1-font_size), bottom_start_y*(1+font_size), CANVAS_WIDTH);
+                    } else if(_val_par == 0) {
+                        if(mirrorFlag) context.fillText(_val, (CANVAS_WIDTH-bottom_start_x)*(1+font_size*1.5), bottom_start_y*(1), CANVAS_WIDTH);
+                        else           context.fillText(_val, bottom_start_x*(1-font_size*1.5), bottom_start_y*(1), CANVAS_WIDTH);
+                    } else {
+                        if(mirrorFlag) context.fillText(_val, (CANVAS_WIDTH-bottom_start_x)*(1+font_size*1.5), bottom_start_y*(1+font_size), CANVAS_WIDTH);
+                        else           context.fillText(_val, (bottom_start_x)*(1-font_size*1.5), bottom_start_y*(1+font_size), CANVAS_WIDTH);
+                    }
+                }
             }
         }
         // end process
@@ -101,7 +149,10 @@ export const LargeGauge = (props) => {
     useEffect(()=>{ // update value
         setTargetValue(props.val);
         if("text" in props) setCaptionText(props.text);
+        if("sub_text" in props) setCaptionSubText(props.sub_text);
         if("mirror" in props) setMirrorFlag(1);
+        if("max_val" in props) setMaxValue(props.max_val);
+        if("split_num" in props) setSplitNum(props.split_num);
         console.log(target_val)
     },[props])
 

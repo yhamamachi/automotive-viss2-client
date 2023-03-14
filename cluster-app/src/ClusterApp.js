@@ -8,6 +8,7 @@ import queryString from 'query-string';
 import "./ClusterApp.css"
 
 /* import local components */
+//import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
 import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
 import {LargeGauge as EngineGauge} from "./components/LargeGauge"
 import {Gauge as BatteryGauge} from "./components/Gauge"
@@ -153,10 +154,10 @@ export const ClusterApp = () => {
     <div className="ClusterApp" style={{"width":scale*1920, "height":scale*720}}>
       {/** Side component */}
       <div className="component"  style={{"top": scale*100+"px", "left": 0+"px"}}>
-        <SpeedGauge className="component" id="l_gauge_1" text="Speed" val={vspd/180*100.0} width={scale*700} height={scale*560} />
+        <SpeedGauge className="component" id="l_gauge_1" text="Speed" sub_text="km/h" max_val={200} split_num={20} val={vspd/200*100.0} width={scale*700} height={scale*560} />
       </div>
       <div className="component"  style={{"top": scale*100+"px", "left": scale*(1920-700)+"px"}}>
-        <EngineGauge className="component" id="l_gauge_2" text="Engine" val={espd/7000*100.0}  width={scale*700} height={scale*560} mirror/>
+        <EngineGauge className="component" id="l_gauge_2" text="Engine" sub_text="(1/min) x1000" max_val={8} split_num={1} val={espd/8000*100.0}  width={scale*700} height={scale*560} mirror/>
       </div>
       <div className="component"  style={{"top": scale*(660-350)+"px", "left": scale*(960-700)+"px"}}>
         <BatteryGauge  id="gauge_1" val={battery} text="Battery" width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
