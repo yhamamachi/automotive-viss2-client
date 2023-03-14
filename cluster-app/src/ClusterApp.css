@@ -1,0 +1,30 @@
+html {
+}
+
+body {
+    background: #000;
+    margin: 0 auto;
+    padding: 0px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#root{
+    position: relative;
+}
+/* background: radial-gradient(形状や中心位置、開始色, 終了色); */
+.ClusterApp{
+    background: radial-gradient(rgb(11, 66, 121), rgb(0, 0, 0) 75%);
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.component {
+    position: absolute;
+    /* border: solid; */
+    border-color: white;
+}
