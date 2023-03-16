@@ -2,3 +2,4 @@ node_modules
 package-lock.json
 unminify_vsspathlist.json
 vsspathlist.json
+package-license.csv

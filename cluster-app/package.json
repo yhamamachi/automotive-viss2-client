@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "license-checker": "^25.0.1",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -11,7 +12,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "license": "license-checker --csv --out package-license.csv"
   },
   "browserslist": {
     "production": [
