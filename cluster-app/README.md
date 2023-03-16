@@ -35,3 +35,9 @@ npm run license
 ```
 Please see package-license.csv
 
+### Show unique license list
+
+```
+tail -n +2 package-license.csv| cut -d',' -f2 | sort | uniq
+```
+
