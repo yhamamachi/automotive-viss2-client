@@ -38,8 +38,12 @@ export const LargeGauge = (props) => {
             gauge_val -= moveValue;
             if (target_val > gauge_val) gauge_val = target_val;
         }
+        if (gauge_val > max_val) {
+            cancelAnimationFrame(animationRef.current);
+            return
+        }
         setValue(gauge_val)
-        
+
         let gaugeWidth = 0.20
         let upper_cross_point_x = 0.8 // -1/4x + ((1.0-gWidth)-0.2*-1/4) = -4x => 15/4x = ((1.0-gWidth)-0.05) => x= 1-4*(1.0-gWidth-0.05)/15
         let upper_cross_point_y = 0.2; // y= -1/4x
