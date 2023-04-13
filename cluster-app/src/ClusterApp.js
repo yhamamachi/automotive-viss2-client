@@ -105,10 +105,20 @@ export const ClusterApp = () => {
       // const websocket = new ReconnectingWebSocket('ws://localhost:5000')
       const websocket = new ReconnectingWebSocket('ws://'+g_serverAddr+':'+g_serverPort)
       socketRef.current = websocket
-      Object.keys(SubscPathList).forEach(element => {
-        console.log(GenerateSubscibeJson(SubscPathList[element]))
-        socketRef.current?.send(GenerateSubscibeJson(element));
-      });
+      const on_connect = (websocket) => {
+        // Subscribe
+        Object.keys(SubscPathList).forEach(element => {
+          console.log(GenerateSubscibeJson(SubscPathList[element]))
+          websocket.send(GenerateSubscibeJson(element));
+        });
+      }
+      on_connect(websocket)
+
+      websocket.onopen = () => {
+        console.log("Call onopen")
+        console.log(socketRef.current.readyState)
+        on_connect(socketRef.current);
+      }
 
       // #2.メッセージ受信時のイベントハンドラを設定
       const onMessage = (event: MessageEvent) => {
