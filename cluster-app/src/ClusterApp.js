@@ -8,14 +8,11 @@ import queryString from 'query-string';
 import "./ClusterApp.css"
 
 /* import local components */
-//import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
-import {LargeGauge as SpeedGauge} from "./components/LargeGauge"
-import {LargeGauge as EngineGauge} from "./components/LargeGauge"
-import {Gauge as BatteryGauge} from "./components/Gauge"
-import {Gauge as FuelGauge} from "./components/Gauge"
 import {TextDisplay} from "./components/TextDisplay"
-import {HTMLViewer} from "./components/HTMLViewer"
-
+import {CircleMeter} from './components/CircleMeter';
+import {Battery as BatteryIcon} from './icons/Battery';
+import {GaugeV2 as Gauge} from "./components/GaugeV2";
+import {SideBar} from "./components/SideBar"
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -154,53 +151,61 @@ export const ClusterApp = () => {
   if( width*720/1920 > height) scale = height/720.0
 
   /* config */
-  let TextSpeedWidth = 240;
-  let TextGearWidth = 120;
   let TextTimeWidth = 240;
-  let GaugeWidth = 130
+  let GuageWidth = 200;
+  let TextGauge = 80;
+  let meter_size = 650
+  let icon_size = 80
+
+  let css_class_name = "ClusterApp"
+  /* sample: Turn red the background color 
+  if (vspd > 200){
+    css_class_name = "ClusterAppError";
+  }
+  */
 
   return (
     <>
-    <div className="ClusterApp" style={{"width":scale*1920, "height":scale*720}}>
-      {/** Side component */}
-      <div className="component"  style={{"top": scale*100+"px", "left": 0+"px"}}>
-        <SpeedGauge className="component" id="l_gauge_1" text="Speed" sub_text="km/h" max_val={200} split_num={20} val={vspd/200*100.0} width={scale*700} height={scale*560} />
+
+    <div className={css_class_name} style={{"width":scale*1920, "height":scale*720}}>
+      <div className="component"  style={{"top": scale*20+"px", "left": scale*10+"px"}}>
+        <SideBar id="SideBarLeft" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size}/>
       </div>
-      <div className="component"  style={{"top": scale*100+"px", "left": scale*(1920-700)+"px"}}>
-        <EngineGauge className="component" id="l_gauge_2" text="Engine" sub_text="(1/min) x1000" max_val={8} split_num={1} val={espd/8000*100.0}  width={scale*700} height={scale*560} mirror/>
-      </div>
-      <div className="component"  style={{"top": scale*(660-350)+"px", "left": scale*(960-700)+"px"}}>
-        <BatteryGauge  id="gauge_1" val={battery} text="Battery" width={scale*GaugeWidth} height={scale*2*GaugeWidth} />
-      </div>
-      <div className="component"  style={{"top": scale*(660-350)+"px", "left": scale*(960+700-GaugeWidth)+"px"}}>
-        <FuelGauge id="gauge_2" val={fuel} text="Fuel" width={scale*GaugeWidth} height={scale*2*GaugeWidth} mirror/>
+      <div className="component"  style={{"top": scale*20+"px", "right": scale*10+"px"}}>
+        <SideBar id="SideBarRight" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} mirror/>
       </div>
 
-      {/** Center component */}
-      <div className="component"  style={{"top": scale*(90)+"px", "left": scale*(960-TextSpeedWidth/2)+"px"}}>
-        <TextDisplay id="text_1" val={vspd} sub_val="km/h" width={scale*(TextSpeedWidth)} height={scale*(TextSpeedWidth*3/4)}/>
+      <div className="component"  style={{"top": scale*150+"px", "left": scale*100+"px"}}>
+        <Gauge id="bat_gauge" val={battery} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0}/>
       </div>
-      <div className="component"  style={{"top": scale*(130)+"px", "left": scale*(960+130)+"px"}}>
-        <TextDisplay id="text_2" val={GearNumToStr[gear]} width={scale*(TextGearWidth)} height={scale*(TextGearWidth)}/>
+      <div className="component" style={{"top": scale*560+"px", "left": scale*170+"px"}}>
+          <BatteryIcon id="bat_icon" width={scale*icon_size} height={scale*icon_size*0.7} size={scale*icon_size} />
+          <TextDisplay id="bat_text" val="Battery" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
-      <div className="component"  style={{"top": (scale*350)+"px", "left": scale*(960-160)+"px"}}>
-        <HTMLViewer url="/dummy.html" id="html1" width={scale*(320)+"px"} height={scale*(240)+"px"} />
+
+      <div className="component"  style={{"top": scale*50+"px", "left": scale*280+"px"}}>
+        <CircleMeter id="SpeedMeter" text="Speed" sub_text="km/h" max_val={200} split_num={10} val={vspd} size={scale*meter_size}/>
       </div>
-      <div className="component"  style={{"top": scale*(620)+"px", "left": scale*(960-TextTimeWidth/2)+"px"}}>
-        <TextDisplay id="text_3" val={time} width={scale*(TextTimeWidth)} height={scale*(TextTimeWidth/3)}/>
+
+      <div className="component"  style={{"top": scale*(50)+"px", "left": scale*(960-TextTimeWidth/2)+"px"}}>
+        <TextDisplay id="timeCaption" val="Time" width={scale*(TextTimeWidth)} height={scale*(TextTimeWidth/4)}/>
+        <TextDisplay id="timeValue" val={time} width={scale*(TextTimeWidth)} height={scale*(TextTimeWidth/4)}/>
+      </div>
+
+      <div className="component"  style={{"top": scale*50+"px", "right": scale*280+"px"}}>
+        <CircleMeter id="EngineMeter" text="Engine" sub_text="rpm" max_val={10000} split_val={1000} val={espd} scale={1000} size={scale*meter_size}/>
+      </div>
+
+      <div className="component"  style={{"top": scale*150+"px", "right": scale*100+"px"}}>
+        <Gauge id="fuel_gauge" val={fuel} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0} mirror/>
+      </div>
+      <div className="component" style={{"top": scale*560+"px", "right": scale*170+"px"}}>
+        <svg viewBox="60 38 5 20"  width={scale*icon_size} height={scale*icon_size*0.7} size={scale*icon_size} >
+          <use href="img/fuel.svg#Fuel" style={{"fill": "#aaa"}}></use>
+        </svg>
+        <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
     </div>
-
-    {/* for Debug */}
-      {/* <div>最後に受信したメッセージ: {message}</div> */}
-      <p style={{"display": "none"}}>
-        For debug outputs:<br/>
-        width, height, scale: {width} {height} {scale}<br/>
-        Vehicle Speed:{vspd} km/h<br/>
-        Engine Speed: {espd} rpm<br/>
-        Fuel Meter:   {fuel} %<br/>
-        Battery:      {battery} %<br/>
-      </p>
     </>
   );
 }

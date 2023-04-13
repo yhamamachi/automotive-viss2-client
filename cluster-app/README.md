@@ -41,3 +41,8 @@ Please see package-license.csv
 tail -n +2 package-license.csv| cut -d',' -f2 | sort | uniq
 ```
 
+### Free components list using in this repository
+
+- public/img/Fuel.svg
+  - Public Domain(Get from wikimedia https://commons.wikimedia.org/wiki/File:Fuel.svg)
+
