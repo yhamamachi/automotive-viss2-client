@@ -37,21 +37,6 @@ export const SideBar = (props) => {
     const drawGaugeAnime = () => {
         animationRef.current = requestAnimationFrame(drawGaugeAnime);
 
-        // animation用のupdate value
-        if (target_val > gauge_val) {
-            gauge_val += moveValue;
-            if (target_val < gauge_val) gauge_val = target_val;
-        }
-        if (target_val < gauge_val) {
-            gauge_val -= moveValue;
-            if (target_val > gauge_val) gauge_val = target_val;
-        }
-        if (gauge_val > max_val) {
-            cancelAnimationFrame(animationRef.current);
-            return
-        }
-        setValue(gauge_val)
-
         // outer/inner circle config
         let base_radius = CANVAS_WIDTH/2
         let outer_line_width = 3
@@ -89,9 +74,7 @@ export const SideBar = (props) => {
         context.save()
 
         // end process
-        if (gauge_val == target_val) {
-            cancelAnimationFrame(animationRef.current);
-        }
+        cancelAnimationFrame(animationRef.current);
     };
     
     useEffect(()=>{ // update value
@@ -113,7 +96,7 @@ export const SideBar = (props) => {
                 cancelAnimationFrame(animationRef.current);
             }
         }
-    },[context, target_val])
+    },[context, props])
 
     return(
         <div>

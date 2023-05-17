@@ -26,17 +26,6 @@ export const TextDisplay = (props) => {
     const drawGaugeAnime = () => {
         animationRef.current = requestAnimationFrame(drawGaugeAnime);
 
-        // animation用のupdate value
-        if (target_val > gauge_val) {
-            gauge_val += moveValue;
-            if (target_val < gauge_val) gauge_val = target_val;
-        }
-        if (target_val < gauge_val) {
-            gauge_val -= moveValue;
-            if (target_val > gauge_val) gauge_val = target_val;
-        }
-        setValue(gauge_val)
-        
         // canvas
         let value = gauge_val;
         let start_x = Math.floor(CANVAS_WIDTH * 0.5 * (100-gauge_val) / 100)
@@ -67,9 +56,7 @@ export const TextDisplay = (props) => {
         context.restore()
     
         // end process
-        if (gauge_val == target_val) {
-            cancelAnimationFrame(animationRef.current);
-        }
+        cancelAnimationFrame(animationRef.current);
     };
     
     useEffect(()=>{ // update value

@@ -45,9 +45,7 @@ export const Battery = (props) => {
         context.save()
 
         // end process
-        if (gauge_val == target_val) {
-            cancelAnimationFrame(animationRef.current);
-        }
+        cancelAnimationFrame(animationRef.current);
     };
 
     useEffect(()=>{ // update value
@@ -68,7 +66,7 @@ export const Battery = (props) => {
                 cancelAnimationFrame(animationRef.current);
             }
         }
-    },[context, target_val])
+    },[context, props])
 
     return(
         <div>
