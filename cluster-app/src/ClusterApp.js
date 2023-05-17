@@ -83,7 +83,7 @@ export const ClusterApp = () => {
      * For debug/demo purpose
     */
       const interval = setInterval(() => {
-        setVehicleSpeed(Math.floor(Math.random()*180))
+        setVehicleSpeed(Math.floor(Math.random()*180*2))
         setEngineSpeed(Math.floor(Math.random()*7000))
         setFuelLevel(Math.floor(Math.random()*100))
         setBatteryLevel(Math.floor(Math.random()*100))
@@ -158,11 +158,10 @@ export const ClusterApp = () => {
   let icon_size = 80
 
   let css_class_name = "ClusterApp"
-  /* sample: Turn red the background color 
+  /* sample: Turn red the background color */
   if (vspd > 200){
     css_class_name = "ClusterAppError";
   }
-  */
 
   return (
     <>
