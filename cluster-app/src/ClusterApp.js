@@ -13,6 +13,7 @@ import {CircleMeter} from './components/CircleMeter';
 import {Battery as BatteryIcon} from './icons/Battery';
 import {GaugeV2 as Gauge} from "./components/GaugeV2";
 import {SideBar} from "./components/SideBar"
+import {DemoAlertPopup} from "./components/DemoAlertPopup";
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -156,6 +157,8 @@ export const ClusterApp = () => {
   let TextGauge = 80;
   let meter_size = 650
   let icon_size = 80
+  let alert_width=1920
+  let alert_height=300
 
   let css_class_name = "ClusterApp"
   /* sample: Turn red the background color */
@@ -204,6 +207,9 @@ export const ClusterApp = () => {
         </svg>
         <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
+
+      /** Demo用: Popup表示をしてくれるコンポーネント */
+      <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale+"px"} height={alert_height*scale+"px"} scale={scale} />
     </div>
     </>
   );
