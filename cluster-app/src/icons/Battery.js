@@ -7,18 +7,13 @@ const styles = {
 
 export const Battery = (props) => {
     const [context,setContext] = useState(null)
-    const [val, setValue] = React.useState(0)
-    const [target_val, setTargetValue] = React.useState(0)
-    
+
     const CANVAS_WIDTH=Number(props.width)
     const CANVAS_HEIGHT=Number(props.height)
 
     const animationRef = React.useRef();
-    var gauge_val = val;
 
     const drawGaugeAnime = () => {
-        animationRef.current = requestAnimationFrame(drawGaugeAnime);
-
         // canvas
         context.fillStyle = 'rgba(255,255,255,0)'; 
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -33,7 +28,7 @@ export const Battery = (props) => {
             context.fillRect(CANVAS_WIDTH*0.00, CANVAS_HEIGHT*0.90, CANVAS_WIDTH*0.86, CANVAS_HEIGHT*0.06)
             context.fillRect(CANVAS_WIDTH*0.00, CANVAS_HEIGHT*0.05, CANVAS_WIDTH*0.06, CANVAS_HEIGHT*0.90)
             context.fillRect(CANVAS_WIDTH*0.80, CANVAS_HEIGHT*0.05, CANVAS_WIDTH*0.06, CANVAS_HEIGHT*0.90)
-            
+
             context.fillRect(CANVAS_WIDTH*0.84, CANVAS_HEIGHT*0.20, CANVAS_WIDTH*0.15, CANVAS_HEIGHT*0.60)
 
             for(var i = 0; i<4; ++i) {
@@ -42,18 +37,7 @@ export const Battery = (props) => {
             }
         }
         context.restore()
-        context.save()
-
-        // end process
-        if (gauge_val == target_val) {
-            cancelAnimationFrame(animationRef.current);
-        }
     };
-
-    useEffect(()=>{ // update value
-        setTargetValue(props.val);
-        console.log(target_val)
-    },[props])
 
     useEffect(()=>{ // After adding canvas component, context is created
         const canvas = document.getElementById(props.id)
@@ -64,11 +48,8 @@ export const Battery = (props) => {
     useEffect(()=>{
         if(context!==null) {
             drawGaugeAnime();
-            return () => {
-                cancelAnimationFrame(animationRef.current);
-            }
         }
-    },[context, target_val])
+    },[context, props.width, props.height])
 
     return(
         <div>

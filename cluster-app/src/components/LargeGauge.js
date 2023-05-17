@@ -90,6 +90,7 @@ export const LargeGauge = (props) => {
             context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);//塗りつぶされた四角形            
         }
         context.restore()
+
         if(0){ // cross point show
             context.fillStyle = "red"
             context.fillRect(upper_cross_point_x * CANVAS_WIDTH, upper_cross_point_y * CANVAS_HEIGHT

@@ -10,7 +10,6 @@ const styles = {
 
 export const TextDisplay = (props) => {
     const [context,setContext] = useState(null)
-    const [val, setValue] = React.useState(0)
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
     const [width, setWidth] = React.useState(0)
@@ -20,28 +19,9 @@ export const TextDisplay = (props) => {
     
     const CANVAS_WIDTH=width
     const CANVAS_HEIGHT=height
-    var gauge_val = val;
-    let tan = (CANVAS_WIDTH/2) / CANVAS_HEIGHT
 
     const drawGaugeAnime = () => {
-        animationRef.current = requestAnimationFrame(drawGaugeAnime);
-
-        // animation用のupdate value
-        if (target_val > gauge_val) {
-            gauge_val += moveValue;
-            if (target_val < gauge_val) gauge_val = target_val;
-        }
-        if (target_val < gauge_val) {
-            gauge_val -= moveValue;
-            if (target_val > gauge_val) gauge_val = target_val;
-        }
-        setValue(gauge_val)
-        
         // canvas
-        let value = gauge_val;
-        let start_x = Math.floor(CANVAS_WIDTH * 0.5 * (100-gauge_val) / 100)
-        let start_y = Math.floor(CANVAS_HEIGHT * (100-gauge_val) / 100)
-        
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         context.save()
         {
@@ -65,11 +45,6 @@ export const TextDisplay = (props) => {
             }
         }
         context.restore()
-    
-        // end process
-        if (gauge_val == target_val) {
-            cancelAnimationFrame(animationRef.current);
-        }
     };
     
     useEffect(()=>{ // update value
@@ -89,9 +64,6 @@ export const TextDisplay = (props) => {
     useEffect(()=>{
         if(context!==null) {
             drawGaugeAnime();
-            return () => {
-                cancelAnimationFrame(animationRef.current);
-            }
         }
     },[context, target_val, width, height])
 
