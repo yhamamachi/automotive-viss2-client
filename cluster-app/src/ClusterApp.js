@@ -208,7 +208,7 @@ export const ClusterApp = () => {
         <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
 
-      /** Demo用: Popup表示をしてくれるコンポーネント */
+      {/** Demo用: Popup表示をしてくれるコンポーネント */}
       <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale+"px"} height={alert_height*scale+"px"} scale={scale} />
     </div>
     </>

@@ -10,7 +10,6 @@ const styles = {
 
 export const TextDisplay = (props) => {
     const [context,setContext] = useState(null)
-    const [val, setValue] = React.useState(0)
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
     const [width, setWidth] = React.useState(0)
@@ -20,17 +19,11 @@ export const TextDisplay = (props) => {
     
     const CANVAS_WIDTH=width
     const CANVAS_HEIGHT=height
-    var gauge_val = val;
-    let tan = (CANVAS_WIDTH/2) / CANVAS_HEIGHT
 
     const drawGaugeAnime = () => {
         animationRef.current = requestAnimationFrame(drawGaugeAnime);
 
         // canvas
-        let value = gauge_val;
-        let start_x = Math.floor(CANVAS_WIDTH * 0.5 * (100-gauge_val) / 100)
-        let start_y = Math.floor(CANVAS_HEIGHT * (100-gauge_val) / 100)
-        
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         context.save()
         {

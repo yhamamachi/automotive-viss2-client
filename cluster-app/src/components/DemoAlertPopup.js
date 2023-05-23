@@ -25,7 +25,7 @@ export const DemoAlertPopup = (props) => {
         transform: "translate(-50%, -50%)",
         fontSize: 4.0*props.scale+"em",
     }
-    if (val < max_val) {
+    if (val <= max_val) {
         _style_alert.display = "none"
     }
 
