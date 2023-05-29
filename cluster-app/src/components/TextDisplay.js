@@ -21,8 +21,6 @@ export const TextDisplay = (props) => {
     const CANVAS_HEIGHT=height
 
     const drawGaugeAnime = () => {
-        animationRef.current = requestAnimationFrame(drawGaugeAnime);
-
         // canvas
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         context.save()
@@ -47,9 +45,6 @@ export const TextDisplay = (props) => {
             }
         }
         context.restore()
-    
-        // end process
-        cancelAnimationFrame(animationRef.current);
     };
     
     useEffect(()=>{ // update value
@@ -69,9 +64,6 @@ export const TextDisplay = (props) => {
     useEffect(()=>{
         if(context!==null) {
             drawGaugeAnime();
-            return () => {
-                cancelAnimationFrame(animationRef.current);
-            }
         }
     },[context, target_val, width, height])
 

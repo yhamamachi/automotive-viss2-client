@@ -14,8 +14,6 @@ export const Battery = (props) => {
     const animationRef = React.useRef();
 
     const drawGaugeAnime = () => {
-        animationRef.current = requestAnimationFrame(drawGaugeAnime);
-
         // canvas
         context.fillStyle = 'rgba(255,255,255,0)'; 
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -39,9 +37,6 @@ export const Battery = (props) => {
             }
         }
         context.restore()
-
-        // end process
-        cancelAnimationFrame(animationRef.current);
     };
 
     useEffect(()=>{ // After adding canvas component, context is created
@@ -53,9 +48,6 @@ export const Battery = (props) => {
     useEffect(()=>{
         if(context!==null) {
             drawGaugeAnime();
-            return () => {
-                cancelAnimationFrame(animationRef.current);
-            }
         }
     },[context, props.width, props.height])
 
