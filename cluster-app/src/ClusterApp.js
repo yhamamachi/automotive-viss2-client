@@ -158,22 +158,22 @@ export const ClusterApp = () => {
   let meter_size = 650
   let icon_size = 80
   let alert_width=1920
-  let alert_height=300
+  let alert_height=720
 
   let css_class_name = "ClusterApp"
   /* sample: Turn red the background color */
   if (vspd > 200){
-    css_class_name = "ClusterAppError";
+    //css_class_name = "ClusterAppError";
   }
 
   return (
     <>
 
     <div className={css_class_name} style={{"width":scale*1920, "height":scale*720}}>
-      <div className="component"  style={{"top": scale*20+"px", "left": scale*10+"px"}}>
+      <div className="component"  style={{"top": scale*30+"px", "left": scale*10+"px"}}>
         <SideBar id="SideBarLeft" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size}/>
       </div>
-      <div className="component"  style={{"top": scale*20+"px", "right": scale*10+"px"}}>
+      <div className="component"  style={{"top": scale*30+"px", "right": scale*10+"px"}}>
         <SideBar id="SideBarRight" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} mirror/>
       </div>
 
@@ -209,7 +209,7 @@ export const ClusterApp = () => {
       </div>
 
       {/** Demo用: Popup表示をしてくれるコンポーネント */}
-      <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale+"px"} height={alert_height*scale+"px"} scale={scale} />
+      <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale} height={alert_height*scale} scale={scale} />
     </div>
     </>
   );
