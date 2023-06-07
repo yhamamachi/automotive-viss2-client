@@ -33,11 +33,12 @@ export const DemoAlertPopup = (props) => {
         textStroke: "50px red",
         width: props.width,
         // height: props.height,
-        top: props.height*0.77,
+        top: props.height*0.8,
         left: "0%",
         fontSize: 7.0*props.scale+"em",
         opacity: 1.0,
         fontFamily: 'Dejavu Sans, Arial Black',
+        textShadow: "0 0 20px rgba(200,200,50,1.0)",
     }
     let _triangle_size = 270*props.scale*1.0;
     let _h_offset = -0.035
@@ -93,15 +94,18 @@ export const DemoAlertPopup = (props) => {
     };
 
     // outer 
-    _triangle_size *= 1.03
+    _triangle_size *= 1.03;
+    //let _boxshadow = "1px 1px 6px 2px #cc3";
+    let _boxshadow = "1px 1px 6px 2px rgba(200,200,50, 0.5)";
     let _style_triangle_curve_outer_1 = { ..._style_triangle_curve_1,
          background: '#FFFFFF',
          width: 2.0*_triangle_size+"px",
          height: 0.2*_triangle_size+"px",
          top: props.height*_top_offset + _triangle_size*Math.sqrt(3)/4 +  _triangle_size*_h_offset,
-         left: props.width/2 - _triangle_size
+         left: props.width/2 - _triangle_size,
          //  left: props.width/2 - _triangle_size,
         //  top: props.height/2 + _triangle_size*Math.sqrt(3)/2 - _triangle_size*0.175,
+        boxShadow: _boxshadow,
       }
      let _style_triangle_curve_outer_2 = { ..._style_triangle_curve_2,
         background: '#FFFFFF',
@@ -111,6 +115,7 @@ export const DemoAlertPopup = (props) => {
         left: props.width/2 - _triangle_size - _triangle_size/2 - _triangle_size*_h_offset,
         // left: props.width/2 - (_triangle_size*1.5 + _triangle_size*_h_offset),
         // top: props.height/2 - _triangle_size*0.1,
+        boxShadow: _boxshadow,
     }
     let _style_triangle_curve_outer_3 = { ..._style_triangle_curve_3,
         background: '#FFFFFF',
@@ -120,29 +125,41 @@ export const DemoAlertPopup = (props) => {
         left: props.width/2 - _triangle_size + _triangle_size/2 + _triangle_size*_h_offset,
         // left: props.width/2 - (_triangle_size*0.5 - _triangle_size*_h_offset),
         // top: props.height/2 - _triangle_size*0.1,
+        boxShadow: _boxshadow,
+    }
+    let _rect_config = {
+        width: 0.15,
+        height: 0.9,
+        border_scale: 0.20,
     }
     let _style_triangle_rect = {
         position: "absolute",
         padding: "0px",
         margin: "0px",
-        background: '#FFFFFF',
-        width: 0.9*_triangle_size+"px",
-        height: 0.2*_triangle_size+"px",
+        background: '#CCCCCC',
+        width: _rect_config.width*_triangle_size+"px",
+        height: _rect_config.height*_triangle_size+"px",
         //borderRadius: 2*_triangle_size+"px",
-        transform: "rotate(90deg)",
-        top: props.height*(1.0-_top_offset-0.07),    
-        left: props.width/2 - 0.9*_triangle_size/2,
+        //transform: "rotate(180deg)",
+        top: props.height*(1.0-_top_offset + 0.15) - _triangle_size*_rect_config.height - Number(_rect_config.border_scale*_rect_config.width*_triangle_size),    
+        left: props.width/2 - _rect_config.width*_triangle_size/2 - Number(_rect_config.border_scale*_rect_config.width*_triangle_size),
+        border: Number(_rect_config.border_scale*_rect_config.width*_triangle_size) + "px solid #FFFFFF",
+    }
+    let _circle_config = {
+        size: 0.25,
+        border_scale: 0.10,
     }
     let _style_triangle_circle = {
         position: "absolute",
         padding: "0px",
         margin: "0px",
-        background: '#FFFFFF',
-        width: 0.3*_triangle_size+"px",
-        height: 0.3*_triangle_size+"px",
-        borderRadius: 3*_triangle_size+"px",
+        background: '#cccccc',
+        width: _circle_config.size*_triangle_size+"px",
+        height: _circle_config.size*_triangle_size+"px",
+        borderRadius: _triangle_size+"px",
         top: props.height*(1.0-_top_offset+0.18),
-        left: props.width/2 - 0.3*_triangle_size/2,
+        left: props.width/2 - _circle_config.size*_triangle_size/2 - Number(_circle_config.border_scale*_circle_config.size*_triangle_size),
+        border: Number(_circle_config.border_scale*_circle_config.size*_triangle_size) + "px solid #FFFFFF",
     }
 
     if (val <= max_val) {
