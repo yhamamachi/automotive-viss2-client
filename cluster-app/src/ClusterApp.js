@@ -14,6 +14,7 @@ import {Battery as BatteryIcon} from './icons/Battery';
 import {GaugeV2 as Gauge} from "./components/GaugeV2";
 import {SideBar} from "./components/SideBar"
 import {DemoAlertPopup} from "./components/DemoAlertPopup";
+import {AlcoholSensor} from "./components/AlcoholSensor";
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -40,6 +41,7 @@ export const ClusterApp = () => {
   const [fuel, setFuelLevel] = React.useState(25)
   const [battery, setBatteryLevel] = React.useState(50)
   const [gear, setCurrentGear] = React.useState(4)
+  const [alc, setAlcoholSensor] = React.useState(-1)
   const [time, setCurrentTime] = React.useState("00:00")
   const socketRef = React.useRef()
 
@@ -49,6 +51,7 @@ export const ClusterApp = () => {
     "Vehicle.Powertrain.FuelSystem.Level": setFuelLevel,
     "Vehicle.Powertrain.TractionBattery.StateOfCharge.Displayed": setBatteryLevel,
     "Vehicle.Powertrain.Transmission.Gear": setCurrentGear,
+    "Vehicle.Private.Safety.AlcoholSensor.value": setAlcoholSensor,
   }
 
   let g_debugFlag = 0; // Switch using websocket or using dummy value.
@@ -89,6 +92,7 @@ export const ClusterApp = () => {
         setFuelLevel(Math.floor(Math.random()*100))
         setBatteryLevel(Math.floor(Math.random()*100))
         setCurrentGear(Math.floor(Math.random()*5))
+        setAlcoholSensor(Math.random())
       }, 1000);
       return () => {clearTimeout(interval)};
     }
@@ -208,6 +212,7 @@ export const ClusterApp = () => {
         <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
 
+      <AlcoholSensor val={alc} scale={scale}/>
       {/** Demo用: Popup表示をしてくれるコンポーネント */}
       <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale} height={alert_height*scale} scale={scale} />
     </div>
