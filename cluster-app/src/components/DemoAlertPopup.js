@@ -52,7 +52,7 @@ export const DemoAlertPopup = (props) => {
         borderBottom: 0.9*_triangle_size*Math.sqrt(3) + "px solid #ff0000",
         borderLeft: 0.9*_triangle_size + "px solid transparent",
         // borderBottomLeftRadius: "10%",
-        top: props.height*(1.0-_top_offset) - 0.9*_triangle_size*Math.sqrt(3)/2,
+        top: props.height*(_top_offset) - 1.15*_triangle_size*Math.sqrt(3)/2,
         left: "50%", 
         transform: "translate(-50%, 0%)",
     }
@@ -141,7 +141,7 @@ export const DemoAlertPopup = (props) => {
         height: _rect_config.height*_triangle_size+"px",
         //borderRadius: 2*_triangle_size+"px",
         //transform: "rotate(180deg)",
-        top: props.height*(1.0-_top_offset + 0.15) - _triangle_size*_rect_config.height - Number(_rect_config.border_scale*_rect_config.width*_triangle_size),    
+        top: props.height*(_top_offset)*1.10 - 1.15*_triangle_size*_rect_config.height - Number(_rect_config.border_scale*_rect_config.width*_triangle_size),    
         left: props.width/2 - _rect_config.width*_triangle_size/2 - Number(_rect_config.border_scale*_rect_config.width*_triangle_size),
         border: Number(_rect_config.border_scale*_rect_config.width*_triangle_size) + "px solid #FFFFFF",
     }
@@ -157,7 +157,7 @@ export const DemoAlertPopup = (props) => {
         width: _circle_config.size*_triangle_size+"px",
         height: _circle_config.size*_triangle_size+"px",
         borderRadius: _triangle_size+"px",
-        top: props.height*(1.0-_top_offset+0.18),
+        top: props.height*(_top_offset)*1.10,
         left: props.width/2 - _circle_config.size*_triangle_size/2 - Number(_circle_config.border_scale*_circle_config.size*_triangle_size),
         border: Number(_circle_config.border_scale*_circle_config.size*_triangle_size) + "px solid #FFFFFF",
     }
