@@ -40,7 +40,7 @@ export const CircleMeter = (props) => {
 
     const animationRef = React.useRef();
     var gauge_val = val;
-    let moveValue = max_val/50
+    let moveValue = max_val/200
 
     // outer/inner circle config
     let base_radius = CANVAS_WIDTH/2
