@@ -14,7 +14,8 @@ import {Battery as BatteryIcon} from './icons/Battery';
 import {GaugeV2 as Gauge} from "./components/GaugeV2";
 import {SideBar} from "./components/SideBar"
 import {DemoAlertPopup} from "./components/DemoAlertPopup";
-import {AlcoholSensor} from "./components/AlcoholSensor";
+// import {AlcoholSensor} from "./components/AlcoholSensor";
+import {AlcoholSensorV2} from "./components/AlcoholSensorV2";
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -215,7 +216,9 @@ export const ClusterApp = () => {
         <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
 
-      <AlcoholSensor val={alc} scale={scale}/>
+      {/** Demo用: Alcohol表示をしてくれるコンポーネント */}
+      {/* <AlcoholSensor val={alc} scale={scale}/> */}
+      <AlcoholSensorV2 val={alc} max_val={0.15} width={alert_width*scale} height={alert_height*scale} scale={scale} />
       {/** Demo用: Popup表示をしてくれるコンポーネント */}
       <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale} height={alert_height*scale} scale={scale} />
     </div>
