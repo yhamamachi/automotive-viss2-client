@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react"
 import ReactDOM from "react-dom"
 
-const moveValue = 3;
+const moveValue = 1;
 
 const wrapper_styles = {
     "position": "relative",
