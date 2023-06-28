@@ -13,6 +13,7 @@ import {CircleMeter} from './components/CircleMeter';
 import {Battery as BatteryIcon} from './icons/Battery';
 import {GaugeV2 as Gauge} from "./components/GaugeV2";
 import {SideBar} from "./components/SideBar"
+import {DemoAlertPopup} from "./components/DemoAlertPopup";
 
 const GenerateSubscibeJson = (DataPath) => {
   return (
@@ -156,11 +157,13 @@ export const ClusterApp = () => {
   let TextGauge = 80;
   let meter_size = 650
   let icon_size = 80
+  let alert_width=1920
+  let alert_height=720
 
   let css_class_name = "ClusterApp"
   /* sample: Turn red the background color 
   if (vspd > 200){
-    css_class_name = "ClusterAppError";
+    //css_class_name = "ClusterAppError";
   }
   */
 
@@ -168,10 +171,10 @@ export const ClusterApp = () => {
     <>
 
     <div className={css_class_name} style={{"width":scale*1920, "height":scale*720}}>
-      <div className="component"  style={{"top": scale*20+"px", "left": scale*10+"px"}}>
+      <div className="component"  style={{"top": scale*30+"px", "left": scale*10+"px"}}>
         <SideBar id="SideBarLeft" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size}/>
       </div>
-      <div className="component"  style={{"top": scale*20+"px", "right": scale*10+"px"}}>
+      <div className="component"  style={{"top": scale*30+"px", "right": scale*10+"px"}}>
         <SideBar id="SideBarRight" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} mirror/>
       </div>
 
@@ -205,6 +208,9 @@ export const ClusterApp = () => {
         </svg>
         <TextDisplay id="fuel_text" val="Fuel" width={scale*(TextGauge)} height={scale*(TextGauge*2/4)}/>
       </div>
+
+      /** Demo用: Popup表示をしてくれるコンポーネント */
+      <DemoAlertPopup val={vspd} max_val={200} width={alert_width*scale} height={alert_height*scale} scale={scale} />
     </div>
     </>
   );
