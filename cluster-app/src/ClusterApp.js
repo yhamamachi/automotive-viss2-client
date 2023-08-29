@@ -173,6 +173,9 @@ export const ClusterApp = () => {
     //css_class_name = "ClusterAppError";
   }
   */
+  if (alc > -1.0){
+    css_class_name = "ClusterAppAlcohol";
+  }
 
   const getAlcDebugButton = () => { 
       const query = queryString.parse(location.search)
@@ -190,14 +193,14 @@ export const ClusterApp = () => {
 
     <div className={css_class_name} style={{"width":scale*1920, "height":scale*720}}>
       <div className="component"  style={{"top": scale*30+"px", "left": scale*10+"px"}}>
-        <SideBar id="SideBarLeft" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size}/>
+        <SideBar id="SideBarLeft" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} alc={alc}/>
       </div>
       <div className="component"  style={{"top": scale*30+"px", "right": scale*10+"px"}}>
-        <SideBar id="SideBarRight" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} mirror/>
+        <SideBar id="SideBarRight" width={scale*50+"px"} height={scale*700+"px"} size={scale*meter_size} alc={alc} mirror/>
       </div>
 
       <div className="component"  style={{"top": scale*150+"px", "left": scale*100+"px"}}>
-        <Gauge id="bat_gauge" val={battery} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0}/>
+        <Gauge id="bat_gauge" val={battery} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0} alc={alc}/>
       </div>
       <div className="component" style={{"top": scale*560+"px", "left": scale*170+"px"}}>
           <BatteryIcon id="bat_icon" width={scale*icon_size} height={scale*icon_size*0.7} size={scale*icon_size} />
@@ -205,7 +208,7 @@ export const ClusterApp = () => {
       </div>
 
       <div className="component"  style={{"top": scale*50+"px", "left": scale*280+"px"}}>
-        <CircleMeter id="SpeedMeter" text="Speed" sub_text="km/h" max_val={200} split_num={10} val={vspd} size={scale*meter_size}/>
+        <CircleMeter id="SpeedMeter" text="Speed" sub_text="km/h" max_val={200} split_num={10} val={vspd} size={scale*meter_size} alc={alc}/>
       </div>
 
       <div className="component"  style={{"top": scale*(50)+"px", "left": scale*(960-TextTimeWidth/2)+"px"}}>
@@ -214,11 +217,11 @@ export const ClusterApp = () => {
       </div>
 
       <div className="component"  style={{"top": scale*50+"px", "right": scale*280+"px"}}>
-        <CircleMeter id="EngineMeter" text="Engine" sub_text="rpm" max_val={10000} split_val={1000} val={espd} scale={1000} size={scale*meter_size}/>
+        <CircleMeter id="EngineMeter" text="Engine" sub_text="rpm" max_val={10000} split_val={1000} val={espd} scale={1000} size={scale*meter_size} alc={alc}/>
       </div>
 
       <div className="component"  style={{"top": scale*150+"px", "right": scale*100+"px"}}>
-        <Gauge id="fuel_gauge" val={fuel} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0} mirror/>
+        <Gauge id="fuel_gauge" val={fuel} text="Battery" width={scale*GuageWidth} height={scale*GuageWidth*2.0} mirror alc={alc}/>
       </div>
       <div className="component" style={{"top": scale*560+"px", "right": scale*170+"px"}}>
         <svg viewBox="60 38 5 20"  width={scale*icon_size} height={scale*icon_size*0.7} size={scale*icon_size} >

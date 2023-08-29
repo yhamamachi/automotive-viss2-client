@@ -8,6 +8,7 @@ const styles = {
 export const SideBar = (props) => {
     const [context,setContext] = useState(null)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
+    const [alc_flag, setAlcFlag] = React.useState(false)
 
     const CANVAS_WIDTH=Number(props.size)
     const CANVAS_HEIGHT=Number(props.size)
@@ -27,6 +28,8 @@ export const SideBar = (props) => {
             } 
     
             let meter_scale_color = 'rgba(153,204,255, 1.00)';
+            if(alc_flag) meter_scale_color = 'rgba(173,255,183, 1.00)';
+
             { // harf Circle
                 // arc(x, y, radius, startAngle, endAngle, counterclockwise)
                 context.scale(0.25, 1.0)
@@ -42,6 +45,12 @@ export const SideBar = (props) => {
     
     useEffect(()=>{ // update value
         if("mirror" in props) setMirrorFlag(1);
+        if("alc" in props) {
+            if (props.alc > -1 && alc_flag == false)
+                setAlcFlag(true);
+            else if (props.alc < 0 && alc_flag == true)
+                setAlcFlag(false);
+        }
     },[props])
 
     useEffect(()=>{ // After adding canvas component, context is created
@@ -54,7 +63,7 @@ export const SideBar = (props) => {
         if(context!==null) {
             drawGaugeAnime();
         }
-    },[context, props])
+    },[context, props, alc_flag])
 
     return(
         <div>

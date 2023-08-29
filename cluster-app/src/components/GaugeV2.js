@@ -22,6 +22,7 @@ export const GaugeV2 = (props) => {
     const [val, setValue] = React.useState(0)
     const [target_val, setTargetValue] = React.useState(0)
     const [mirrorFlag, setMirrorFlag] = React.useState(0)
+    const [alc_flag, setAlcFlag] = React.useState(false)
 
     const animationRef = React.useRef();
 
@@ -35,7 +36,9 @@ export const GaugeV2 = (props) => {
     // canvas
     let tilt = 0.4;
     let meter_color = 'rgba(0,102,255, 0.50)';
+    if(alc_flag) meter_color = 'rgba(0,255,102, 0.50)';
     let meter_scale_color = 'rgba(153,204,255, 1.00)';
+    if(alc_flag) meter_scale_color = 'rgba(173,255,183, 1.00)';
     let white = 'rgba(255,255,255, 1.00)';
     let cursor_color = meter_scale_color;// 'rgba(255, 255, 0, 1.00)';
 
@@ -175,6 +178,12 @@ export const GaugeV2 = (props) => {
     useEffect(()=>{ // update value
         setTargetValue(props.val);
         if("mirror" in props) setMirrorFlag(1);
+        if("alc" in props) {
+            if (props.alc > -1 && alc_flag == false)
+                setAlcFlag(true);
+            else if (props.alc < 0 && alc_flag == true)
+                setAlcFlag(false);
+        }
         console.log(target_val)
     },[props])
 
@@ -195,13 +204,13 @@ export const GaugeV2 = (props) => {
                 animationRef.current = null;
             }
         }
-    },[context, target_val])
+    },[context, target_val, alc_flag])
 
     useEffect(()=>{
         if(bg_context!==null) {
             drawBackground();
         }
-    },[bg_context, props.width, props.height])
+    },[bg_context, props.width, props.height, alc_flag])
 
     return(
         <div style={wrapper_styles}>
