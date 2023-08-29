@@ -174,8 +174,19 @@ export const ClusterApp = () => {
   }
   */
 
+  const getAlcDebugButton = () => { 
+      const query = queryString.parse(location.search)
+      if ("alcdebugButton" in query) return "show"
+      return "none";
+  };
+
   return (
     <>
+    <div style={{"display": getAlcDebugButton() }}>
+      <button onClick={() => setAlcoholSensor(-1.0)}>ALC=-1</button>
+      <button onClick={() => setAlcoholSensor(0.0)}>ALC= 0</button>
+      <button onClick={() => setAlcoholSensor(1.0)}>ALC=+1</button>
+    </div>
 
     <div className={css_class_name} style={{"width":scale*1920, "height":scale*720}}>
       <div className="component"  style={{"top": scale*30+"px", "left": scale*10+"px"}}>
