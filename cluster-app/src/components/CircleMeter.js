@@ -34,6 +34,7 @@ export const CircleMeter = (props) => {
     const [max_val, setMaxValue] = React.useState(180)
     const [split_num, setSplitNum] = React.useState(20)
     const [split_val_flag, setSplitValFlag] = React.useState(0)
+    const [alc_flag, setAlcFlag] = React.useState(false)
 
     const CANVAS_WIDTH=Number(props.size)
     const CANVAS_HEIGHT=Number(props.size)
@@ -183,6 +184,7 @@ export const CircleMeter = (props) => {
                 // arc(x, y, radius, startAngle, endAngle, counterclockwise)
                 context.arc( CANVAS_WIDTH/2, CANVAS_HEIGHT/2, base_radius*meter_radius_scale-meter_line_width/2, deg2rad(arc_cut_degree), meter_val, false);
                 context.strokeStyle = 'rgba(0,102,255, 0.50)';
+                if(alc_flag) context.strokeStyle = 'rgba(0,255,102, 0.50)';
                 context.lineWidth = meter_line_width;
                 context.stroke();
             }
@@ -229,6 +231,12 @@ export const CircleMeter = (props) => {
             setSplitNum(props.max_val/props.split_val);
             setSplitValFlag(1);
         }
+        if("alc" in props) {
+            if (props.alc > -1 && alc_flag == false)
+                setAlcFlag(true);
+            else if (props.alc < 0 && alc_flag == true)
+                setAlcFlag(false);
+        }
         console.log(target_val)
     },[props])
 
@@ -254,7 +262,7 @@ export const CircleMeter = (props) => {
                 }
             }
         }
-    },[context, target_val])
+    },[context, target_val, alc_flag])
 
     useEffect(()=>{
         if(bg_context!==null) {
