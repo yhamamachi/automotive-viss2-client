@@ -4,7 +4,7 @@ import ReactDOM from "react-dom"
 export const AlcoholSensorV2 = (props) => {
     const [val, setValue] = React.useState(0)
     const [max_val, setMaxValue] = React.useState(0)
-    
+
     useEffect(()=>{ // update value
         setValue(props.val);
         setMaxValue(props.max_val);
@@ -193,8 +193,21 @@ export const AlcoholSensorV2 = (props) => {
         /* opacity: 0.5; */
     }
 
+    const _alert_beep = document.getElementById("alert_beep");
+
     if (val.toFixed(2) < max_val.toFixed(2)) {
         _style_wrapper.display = "none"
+        if (_alert_beep != null ) {
+            _alert_beep.pause();
+            _alert_beep.muted = true;
+        }
+        console.log("muted")
+    } else {
+        if (_alert_beep != null ) {
+            _alert_beep.play();
+            _alert_beep.muted = false;
+        }
+        console.log("un-muted")
     }
 
     if (val.toFixed(2) < 0 ) {
@@ -243,6 +256,10 @@ export const AlcoholSensorV2 = (props) => {
                     <span style={_style_triangle_circle}></span>
                 </div> 
             </div>
+            {/* Audio */}
+            <audio id="alert_beep" autoPlay={true} loop={true} controls={false} muted={true}>
+                <source src="sound/beep.mp3" />
+            </audio>
         </>
     )
 }

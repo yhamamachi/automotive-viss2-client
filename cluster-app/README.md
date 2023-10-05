@@ -45,4 +45,5 @@ tail -n +2 package-license.csv| cut -d',' -f2 | sort | uniq
 
 - public/img/Fuel.svg
   - Public Domain(Get from wikimedia https://commons.wikimedia.org/wiki/File:Fuel.svg)
-
+- public/sound/beep.mp3(converted from ogg file)
+  - CC0(Public Domain) (Get from opengameart.org https://opengameart.org/content/beep-sound)
